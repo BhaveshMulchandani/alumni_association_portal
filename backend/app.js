@@ -4,7 +4,12 @@ const ConnectToDb = require('./db/db')
 const indexroutes = require("./routes/index.routes")
 const userroutes = require("./routes/user.routes")
 const cookieparser = require('cookie-parser')
+const cors = require('cors')
 
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true               
+}));
 app.use(express.json())
 app.use(cookieparser())
 

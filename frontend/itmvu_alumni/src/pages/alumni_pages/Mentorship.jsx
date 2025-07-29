@@ -1,4 +1,4 @@
-import Navbar_alumni from "../componenets/Navbar_alumni";
+import Navbar_alumni from "../../componenets/Navbar_alumni";
 import { Switch } from "@headlessui/react";
 import { useState } from "react";
 

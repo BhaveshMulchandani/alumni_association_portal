@@ -1,4 +1,4 @@
-import Navbar_alumni from "../componenets/Navbar_alumni";
+import Navbar_alumni from "../../componenets/Navbar_alumni";
 
 const Profile = () => {
   return (

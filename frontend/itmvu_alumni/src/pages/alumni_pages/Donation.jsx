@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Navbar_alumni from "../componenets/Navbar_alumni";
-import Donation_Type from "../componenets/Donation_Type";
-import Donation_Amount from "../componenets/Donation_Amount";
+import Navbar_alumni from "../../componenets/Navbar_alumni";
+import Donation_Type from "../../componenets/Donation_Type";
+import Donation_Amount from "../../componenets/Donation_Amount";
 
 const Donation = () => {
   const [amount, setamount] = useState(null);
