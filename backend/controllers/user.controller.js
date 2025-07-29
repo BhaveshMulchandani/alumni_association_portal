@@ -40,39 +40,63 @@ const signup = async (req, res) => {
 
 }
 
-const login = async (req,res) => {
+const login = async (req, res) => {
 
-    const {email,password} = req.body
+    const { email, password } = req.body
 
-    if(!email || !password){
-        return res.status(400).json({message:"missing credentials!!"})
+    if (!email || !password) {
+        return res.status(400).json({ message: "missing credentials!!" })
     }
 
     try {
-        const user = await usermodel.findOne({email})
+        const user = await usermodel.findOne({ email })
 
-        if(!user){
-            return res.status(404).json({message:"enter valid credentilas"})
+        if (!user) {
+            return res.status(404).json({ message: "enter valid credentilas" })
         }
 
-        const ispassword = await bcrypt.compare(password,user.password)
+        const ispassword = await bcrypt.compare(password, user.password)
 
-        if(!ispassword){
-            return res.status(401).json({message:"enter valid credentials"})
+        if (!ispassword) {
+            return res.status(401).json({ message: "enter valid credentials" })
         }
 
-        let token = jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET)
+        let token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET)
 
-        res.cookie("token",token,{ expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)})
+        res.cookie("token", token, { expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7) })
 
-        return res.status(201).json({message:'user successfully loggedin !!',role:user.role})
+        return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role })
 
     } catch (error) {
 
         console.log("login error :", error)
         return res.status(500).json({ message: "internal server error" })
-        
+
     }
 }
 
-module.exports = { signup, login }
+
+const admin = async (req, res) => {
+    try {
+        const existingadmin = await usermodel.findOne({ email: "admin@me.com" })
+
+        if (existingadmin) return res.status(409).json({ message: "admin already exists." })
+
+        const hashpassword = await bcrypt.hash("admin@1234", 12)
+
+
+        const admin = await usermodel.create({
+
+            username: "Admin",
+            email:"admin@me.com",
+            password: hashpassword,
+            role: "admin"
+        })
+
+        res.status(201).json({message:"admin created successfully"})
+    } catch (error) {
+          res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+module.exports = { signup, login , admin }

@@ -13,7 +13,7 @@ const Login = () => {
   e.preventDefault();
 
   try {
-    const res = await axios.post("http://localhost:3000/user/login", {
+    const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, {
       email,
       password,
     },{
@@ -22,6 +22,12 @@ const Login = () => {
 
     setemail("");
     setpassword("");
+
+
+
+    if (res.data.role == "admin") {
+       window.location.href = import.meta.env.VITE_ADMIN_URL;
+    }
 
     res.data.role === "student"
       ? navigate("/student_dashboard")
