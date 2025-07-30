@@ -6,19 +6,18 @@ var imagekit = new ImageKit({
     urlEndpoint : process.env.IMAGEKIT_URL_ENDPOINT
 });
 
-const uploadfile = (file)=>{
-    return new Promise((resolve, reject)=>{
-        imagekit.upload({
-            file : file.buffer, //required
-            fileName : file.originalname,   //required
-        },(error,result)=>{
-            if(error){
-                reject(error)
-            }else{
-                resolve(result)
-            }
+const uploadfile =async (file)=>{
+    try {
+        const response = await imagekit.upload({
+    file : file.buffer, //required
+    fileName : file.originalname,
         })
-    })
+
+        return response
+        
+    } catch (error) {
+        throw error
+    }
 }
 
 
