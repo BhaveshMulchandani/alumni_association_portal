@@ -3,6 +3,7 @@ const app = express()
 const ConnectToDb = require('./db/db')
 const indexroutes = require("./routes/index.routes")
 const userroutes = require("./routes/user.routes")
+const postroutes = require('./routes/post.routes')
 const cookieparser = require('cookie-parser')
 const cors = require('cors')
 
@@ -18,6 +19,7 @@ ConnectToDb()
 
 app.use("/",indexroutes)
 app.use("/user",userroutes)
+app.use("/post",postroutes)
 
 
 app.listen(3000)
