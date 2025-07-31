@@ -1,20 +1,20 @@
 var ImageKit = require("imagekit");
 
 var imagekit = new ImageKit({
-    publicKey : process.env.IMAGEKIT_PUBLIC_KEY,
-    privateKey : process.env.IMAGEKIT_PRIVATE_KEY,
-    urlEndpoint : process.env.IMAGEKIT_URL_ENDPOINT
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
 });
 
-const uploadfile =async (file)=>{
+const uploadfile = async (file) => {
     try {
         const response = await imagekit.upload({
-    file : file.buffer, //required
-    fileName : file.originalname,
+            file: file.buffer, //required
+            fileName: file.originalname,
         })
 
         return response
-        
+
     } catch (error) {
         throw error
     }
@@ -22,4 +22,4 @@ const uploadfile =async (file)=>{
 
 
 
-module.exports = {uploadfile}
+module.exports = { uploadfile }
