@@ -1,18 +1,60 @@
 const {uploadfile} = require('../service/storage.service')
+const postmodel = require('../models/postmodel')
 
 const createpost = async (req,res) => {
-    console.log(req.body);
-    console.log(req.file)
+
+    const {caption} = req.body
+
+    if(!caption){
+        return res.status(404).json({message:"please enter caption"})
+    }
 
 
-    const filedata = await uploadfile(req.file)
-    console.log(filedata);
+    if(req.file){
+        var filedata = await uploadfile(req.file)
+    }
+try {
+     const post = postmodel.create({
+        image:filedata.url || null,
+        caption,
+        user:req.user._id
+    })
     
 
     res.status(200).json({message:"image created successfully"})
+    
+} catch (error) {
+    return res.status(404).json({message:"image not created!!"})
+}
+}
 
+const likepost = async (req,res) => {
+
+    const {postid} = req.body
+    const userid = req.user._id
+    try{
+
+    const post = await postmodel.findById(postid)
+
+    if(!post){
+        return res.status(404).json({message:"post not created!!"})
+    }
+
+    const alreadyliked = post.likes.includes(userid)
+
+    if(alreadyliked){
+       post.likes = post.likes.filter(id=>id.toString() != userid.toString())
+    }else{
+        post.likes.push(userid)
+    }
+
+    await post.save()
+     return res.status(200).json({ message: alreadyliked ? "Post unliked" : "Post liked" });
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong", error });
+  }
 
 
 }
 
-module.exports = {createpost}
+module.exports = {createpost,likepost}

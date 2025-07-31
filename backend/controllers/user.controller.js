@@ -33,7 +33,6 @@ const signup = async (req, res) => {
 
 
     } catch (error) {
-        console.log("signup error :", error)
         return res.status(500).json({ message: "internal server error" })
 
     }
@@ -68,8 +67,6 @@ const login = async (req, res) => {
         return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role })
 
     } catch (error) {
-
-        console.log("login error :", error)
         return res.status(500).json({ message: "internal server error" })
 
     }

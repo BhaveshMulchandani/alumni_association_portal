@@ -5,6 +5,8 @@ const { isloggedin } = require('../middlewares/user.middleware')
 const upload = require('../utils/multer')
 
 router.post('/createpost', isloggedin, upload.single("image"), postcontroller.createpost)
+router.patch('/likepost', isloggedin, postcontroller.likepost)
+
 
 
 module.exports = router
