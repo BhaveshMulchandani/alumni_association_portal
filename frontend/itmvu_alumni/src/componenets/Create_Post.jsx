@@ -1,8 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import axios from "axios";
 
 const Create_Post = () => {
   const [message, setmessage] = useState("");
   const [file, setfile] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let config = {
+        withCredentials: true,
+      };
+
+      let payload;
+
+      if (file) {
+        const formdata = new FormData();
+        formdata.append("caption", message);
+        formdata.append("image", file);
+        payload = formdata;
+
+        config.headers = {
+          "Content-Type": "multipart/form-data",
+        };
+      } else {
+        payload = { caption: message };
+        config.headers = {
+          "Content-Type": "application/json",
+        };
+      }
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/post/createpost`,
+        payload,
+        config
+      );
+
+      console.log("post created successfully", res.data);
+      setmessage("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch (error) {
+      console.log("there is error", error);
+    }
+  };
 
   return (
     <>
@@ -18,16 +61,7 @@ const Create_Post = () => {
           <h4 className="text-base font-medium text-gray-600">
             What's on your mind?
           </h4>
-          <form
-            action=""
-            className="flex flex-col"
-            onSubmit={(e) => {
-              e.preventDefault();
-
-              setmessage("");
-              setfile(null);
-            }}
-          >
+          <form action="" className="flex flex-col" onSubmit={handlesubmit}>
             <textarea
               placeholder="Enter description here..."
               className="w-full h-28 text-base p-2 border border-pink-200 hover:border-pink-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-400 rounded-md outline-none"
@@ -43,6 +77,7 @@ const Create_Post = () => {
               <input
                 type="file"
                 className="w-full"
+                ref={fileInputRef}
                 onChange={(e) => {
                   setfile(e.target.files[0]);
                 }}

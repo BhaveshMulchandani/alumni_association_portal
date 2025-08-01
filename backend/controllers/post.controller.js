@@ -9,13 +9,15 @@ const createpost = async (req,res) => {
         return res.status(404).json({message:"please enter caption"})
     }
 
+    let imageurl = null
 
     if(req.file){
         var filedata = await uploadfile(req.file)
+        imageurl = filedata.url
     }
 try {
-     const post = postmodel.create({
-        image:filedata.url || null,
+     const post = await postmodel.create({
+        image:imageurl || null,
         caption,
         user:req.user._id
     })
@@ -24,7 +26,7 @@ try {
     res.status(200).json({message:"image created successfully"})
     
 } catch (error) {
-    return res.status(404).json({message:"image not created!!"})
+    return res.status(404).json({message:"image not created!!",error})
 }
 }
 
