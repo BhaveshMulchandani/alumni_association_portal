@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Create_Post = () => {
   const [message, setmessage] = useState("");
   const [file, setfile] = useState(null);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate()
 
   const handlesubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +44,7 @@ const Create_Post = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+      navigate('/dashboard')
     } catch (error) {
       console.log("there is error", error);
     }
