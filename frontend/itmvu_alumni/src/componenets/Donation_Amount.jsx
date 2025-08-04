@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-const Donation_Amount = () => {
-  const [amount, setamount] = useState(null);
+const Donation_Amount = ({amount,setamount}) => {
   return (
     <>
       <div className="space-y-4 mt-6 z-0">

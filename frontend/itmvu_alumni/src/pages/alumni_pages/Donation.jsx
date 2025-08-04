@@ -40,10 +40,10 @@ const Donation = () => {
               </div>
 
               {/* Amount Section */}
-              <Donation_Amount />
+              <Donation_Amount amount={amount} setamount={setamount} />
 
               {/* Donation Type */}
-              <Donation_Type />
+              <Donation_Type donationType={donationType} setDonationType={setDonationType} />
 
               {/* Optional Message */}
               <div className="mt-6">

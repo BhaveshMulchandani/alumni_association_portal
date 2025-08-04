@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-const Donation_Type = () => {
-  const [donationType, setdonationType] = useState("");
+const Donation_Type = ({ donationType, setDonationType }) => {
   return (
     <>
       <div className="mt-6">
@@ -9,38 +8,33 @@ const Donation_Type = () => {
           Donation Type
         </label>
         <div className="space-y-1">
-          <div
-            className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25"
-            onClick={() => setdonationType("scholarship")}
-          >
+          <div className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25">
             <label className="flex items-center space-x-3 cursor-pointer w-full">
               <input
                 type="radio"
+                name="donationType"
                 className="accent-pink-600 w-5 h-5"
                 checked={donationType === "scholarship"}
-                onChange={()=>setdonationType("scholarship")}
+                onChange={() => setDonationType("scholarship")}
               />
-              <i className="ri-award-line text-2xl text-pink-600"></i>
+              <i className="ri-calendar-event-line text-2xl text-pink-600"></i>
               <div>
-                <span className="font-semibold text-gray-800">
-                  Scholarships
-                </span>
+                <span className="font-semibold text-gray-800">Scholarship</span>
                 <p className="text-sm text-gray-600">
-                  Support needy and meritorious students
+                    Support needy and meritorious students
                 </p>
               </div>
             </label>
           </div>
-          <div
-            className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25"
-            onClick={() => setdonationType("event")}
-          >
+
+          <div className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25">
             <label className="flex items-center space-x-3 cursor-pointer w-full">
               <input
                 type="radio"
+                name="donationType"
                 className="accent-pink-600 w-5 h-5"
                 checked={donationType === "event"}
-                 onChange={() => setdonationType("event")}
+                onChange={() => setDonationType("event")}
               />
               <i className="ri-calendar-event-line text-2xl text-pink-600"></i>
               <div>
@@ -51,17 +45,16 @@ const Donation_Type = () => {
               </div>
             </label>
           </div>
-          <div
-            className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25"
-            onClick={() => setdonationType("infrastructure")}
-          >
+          <div className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25">
             <label className="flex items-center space-x-3 cursor-pointer w-full">
               <input
                 type="radio"
+                name="donationType"
                 className="accent-pink-600 w-5 h-5"
                 checked={donationType === "infrastructure"}
-                onChange={() => setdonationType("infrastructure")}
+                onChange={() => setDonationType("infrastructure")}
               />
+
               <i className="ri-building-4-line text-2xl text-pink-600"></i>
               <div>
                 <span className="font-semibold text-gray-800">
@@ -73,16 +66,14 @@ const Donation_Type = () => {
               </div>
             </label>
           </div>
-          <div
-            className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25"
-            onClick={() => setdonationType("generalfund")}
-          >
+          <div className="border rounded-lg p-4 cursor-pointer transition-colors border-pink-200 hover:border-pink-300 hover:bg-pink-25">
             <label className="flex items-center space-x-3 cursor-pointer w-full">
               <input
                 type="radio"
+                name="donationType"
                 className="accent-pink-600 w-5 h-5"
                 checked={donationType === "generalfund"}
-                onChange={() => setdonationType("generalfund")}
+                onChange={() => setDonationType("generalfund")}
               />
               <i className="ri-hand-heart-line text-2xl text-pink-600"></i>
               <div>
