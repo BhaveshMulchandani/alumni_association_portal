@@ -43,7 +43,7 @@ const Jobschema = new mongoose.Schema({
     },
     postedby: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'user',
   },
 })
 

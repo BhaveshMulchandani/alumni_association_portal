@@ -4,7 +4,7 @@ const jobcontroller = require("../controllers/job.controller")
 const router = express.Router()
 
 router.post("/createjob",isloggedin,jobcontroller.createjob)
-router.get("/showjob",isloggedin,jobcontroller.showjob)
+router.get("/showjob", jobcontroller.showjob)
 
 
 module.exports = router

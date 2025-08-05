@@ -1,26 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Navbar_student from "../../componenets/Navbar_student";
-import axios from 'axios' 
+import axios from "axios";
 
-const Student_job = () => {
+function getTimeAgo(dateString) {
+  const postDate = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - postDate) / 1000);
 
-  const [Jobs, setJobs] = useState([])
+  const intervals = [
+    { label: "year", seconds: 31536000 },
+    { label: "month", seconds: 2592000 },
+    { label: "week", seconds: 604800 },
+    { label: "day", seconds: 86400 },
+    { label: "hour", seconds: 3600 },
+    { label: "minute", seconds: 60 },
+    { label: "second", seconds: 1 },
+  ];
 
-  const fetchjobs = () => {
-    try {
-      const res = axios.get(`${import.meta.env.VITE_BACKEND_URL}/job/showjob`,{withCredentials:true})
-      setJobs(res.data.jobs)
-    } catch (error) {
-      console.log("error fetching jobs",error);
-      
+  for (let interval of intervals) {
+    const count = Math.floor(diffInSeconds / interval.seconds);
+    if (count > 0) {
+      return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
     }
   }
 
+  return "just now";
+}
+
+
+const Student_job = () => {
+  const [jobs, setjobs] = useState([]);
+
+  const fetchjobs = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/job/showjob`);
+      setjobs(res.data.jobs);
+    } catch (error) {
+      console.log("error fetching jobs", error);
+    }
+  };
 
   useEffect(() => {
-    fetchjobs()
-  }, [])
-  
+    fetchjobs();
+  }, []);
+
   return (
     <>
       <Navbar_student />
@@ -57,58 +80,56 @@ const Student_job = () => {
           </div>
 
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="w-full max-w-4xl p-5 bg-white border border-pink-200 rounded-xl shadow-sm mx-3">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex flex-col md:flex-row md:items-center gap-2">
-                  <h1 className="text-gray-800 font-medium text-xl">
-                    Frontend Developer
-                  </h1>
-                  <span className="text-sm text-pink-600 bg-pink-100 rounded-full px-3 py-1 flex items-center gap-1">
-                    <i className="ri-group-line"></i> Alumni
+            {jobs.map((job)=>(
+              <div key={job._id} className="w-full max-w-4xl p-5 bg-white border border-pink-200 rounded-xl shadow-sm mx-3">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center gap-2">
+                    <h1 className="text-gray-800 font-medium text-xl">
+                      {job.jobtitle}
+                    </h1>
+                    <span className="text-sm text-pink-600 bg-pink-100 rounded-full px-3 py-1 flex items-center gap-1">
+                      <i className="ri-group-line"></i>{job.postedby?.role || "Unknown"}
+                    </span>
+                  </div>
+                  <a href={job.applicationlink} target="blank" rel="noopener noreferrer" className="bg-pink-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-pink-700 transition">Apply Now</a>
+                </div>
+                <div className="mt-1 flex gap-2">
+                  <div className="text-gray-600 font-semibold text-base">
+                    <i className="ri-building-line"></i>
+                    <span>{job.companyname}</span>
+                  </div>
+                  <div className="text-gray-600 text-base">
+                    <i className="ri-map-pin-line"></i>
+                    <span>{job.location}</span>
+                  </div>
+                </div>
+                <div className="flex items-center text-sm mt-2 space-x-2">
+                  <span className="px-2 rounded-2xl font-medium bg-gray-50 border border-pink-100">
+                    {job.jobtype}
                   </span>
+                  <div className="space-x-1 text-gray-600 ">
+                    <i className="ri-time-line"></i>
+                    <span>{job.experience}years</span>
+                  </div>
+                  <div className="space-x-1 text-gray-600 ">
+                    <i className="ri-money-rupee-circle-line"></i>
+                    <span>{job.salary}LPA</span>
+                  </div>
                 </div>
-                <button className="bg-pink-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-pink-700 transition">
-                  Apply Now
-                </button>
-              </div>
-              <div className="mt-1 flex gap-2">
-                <div className="text-gray-600 font-semibold text-base">
-                  <i className="ri-building-line"></i>
-                  <span>Google</span>
-                </div>
-                <div className="text-gray-600 text-base">
-                  <i className="ri-map-pin-line"></i>
-                  <span>Bengaluru,India</span>
-                </div>
-              </div>
-              <div className="flex items-center text-sm mt-2 space-x-2">
-                <span className="px-2 rounded-2xl font-medium bg-gray-50 border border-pink-100">
-                  Full-Time
-                </span>
-                <div className="space-x-1 text-gray-600 ">
-                  <i class="ri-time-line"></i>
-                  <span>0-2 years</span>
-                </div>
-                <div className="space-x-1 text-gray-600 ">
-                  <i class="ri-money-rupee-circle-line"></i>
-                  <span>8-12 LPA</span>
-                </div>
-              </div>
-              <p className="mt-2 font-light text-gray-800">
-                Join our team to build cutting-edge web applications using
-                React, TypeScript, and modern frontend technologies. Work on
-                products used by millions globally.
-              </p>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-gray-600">
-                  Posted by:{" "}
-                  <span className="text-gray-600 font-medium">
-                    Sarah Chen (Class of 2019)
+                <p className="mt-2 font-light text-gray-800">
+                  {job.jobdescription}
+                </p>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-gray-600">
+                    Posted by:{" "}
+                    <span className="text-gray-600 font-medium">
+                      {job.postedby?.username || "Unknown User"} (Class of  {job.postedby?.passingyear || "not passing"})
+                    </span>
                   </span>
-                </span>
-                <span className="text-gray-600">2 days ago</span>
+                  <span className="text-gray-600">{getTimeAgo(job.createdAt)}</span>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
