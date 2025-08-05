@@ -30,4 +30,17 @@ const createjob = async (req,res) => {
 
 }
 
-module.exports = {createjob}
+const showjob = (req,res)=>{
+
+    try {
+        const jobs = jobmodel.find().sort({createdAt:-1})
+
+        return res.status(200).json({message:"all jobs fetched successfully!!"})
+    } catch (error) {
+        return res.status(500).json({message:"failed to fetch jobs",error})
+    }
+
+
+}
+
+module.exports = {createjob,showjob}

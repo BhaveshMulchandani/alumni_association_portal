@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar_student from "../../componenets/Navbar_student";
+import axios from 'axios' 
 
 const Student_job = () => {
+
+  const [Jobs, setJobs] = useState([])
+
+  const fetchjobs = () => {
+    try {
+      const res = axios.get(`${import.meta.env.VITE_BACKEND_URL}/job/showjob`,{withCredentials:true})
+      setJobs(res.data.jobs)
+    } catch (error) {
+      console.log("error fetching jobs",error);
+      
+    }
+  }
+
+
+  useEffect(() => {
+    fetchjobs()
+  }, [])
+  
   return (
     <>
       <Navbar_student />
