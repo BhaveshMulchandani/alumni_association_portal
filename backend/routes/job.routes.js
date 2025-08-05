@@ -1,0 +1,9 @@
+const express = require('express')
+const { isloggedin } = require("../middlewares/user.middleware")
+const jobcontroller = require("../controllers/job.controller")
+const router = express.Router()
+
+router.post("/createjob",isloggedin,jobcontroller.createjob)
+
+
+module.exports = router

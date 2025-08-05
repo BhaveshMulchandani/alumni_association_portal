@@ -1,19 +1,54 @@
 import React, { useState } from "react";
 import Navbar_alumni from "../../componenets/Navbar_alumni";
+import axios from 'axios'
 
 const Job = () => {
+  const [jobtitle, setjobtitle] = useState("");
+  const [companyname, setcompanyname] = useState("");
+  const [location, setlocation] = useState("");
+  const [jobtype, setjobtype] = useState("Full-Time");
+  const [experience, setexperience] = useState(0);
+  const [salary, setsalary] = useState(25000);
+  const [description, setdescription] = useState("");
+  const [url, seturl] = useState("");
 
-  const [jobtitle, setjobtitle] = useState('')
-  const [companyname, setcompanyname] = useState('')
-  const [location,setlocation] = useState('')
-  const [jobtype, setjobtype] = useState('Full-Time')
-  const [experience, setexperience] = useState(0)
-  const [salary, setsalary] = useState(10000)
-  const [description, setdescription] = useState('')
-  const [url, seturl] = useState('')
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/job/createjob`,
+        {
+          jobtitle,
+          companyname,
+          location,
+          jobtype,
+          experience,
+          salary,
+          jobdescription:description,
+          applicationlink:url,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("job posted successfully", res.data);
+    } catch (error) {
+      console.log("failed to created job successfully", error);
+    }
+    setjobtitle("");
+    setcompanyname("");
+    setlocation("");
+    setjobtype("Full-Time");
+    setexperience(0);
+    setsalary(25000);
+    setdescription("");
+    seturl("");
+  };
+
   return (
     <>
-      <Navbar_alumni/>
+      <Navbar_alumni />
       <div className="mx-auto px-6 py-28 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center space-x-3 mb-4">
@@ -36,11 +71,7 @@ const Job = () => {
                 Job Details
               </h2>
 
-              <form action="" className="space-y-6" onSubmit={
-                (e) =>{
-                  e.preventDefault()
-                }
-              }>
+              <form action="" className="space-y-6" onSubmit={handlesubmit}>
                 <div className="flex flex-col space-y-2">
                   <label className="text-gray-700 font-medium">
                     Job Title *
@@ -50,8 +81,8 @@ const Job = () => {
                     className="outline-none border border-pink-200 focus:border-pink-400 rounded-lg p-3"
                     placeholder="e.g software engineer,ml engineer..."
                     value={jobtitle}
-                    onChange={(e) =>{
-                      setjobtitle(e.target.value)
+                    onChange={(e) => {
+                      setjobtitle(e.target.value);
                     }}
                   />
                 </div>
@@ -65,8 +96,8 @@ const Job = () => {
                     className="outline-none border border-pink-200 focus:border-pink-400 rounded-lg p-3"
                     placeholder="e.g google,microsoft,meta..."
                     value={companyname}
-                    onChange={(e) =>{
-                      setcompanyname(e.target.value)
+                    onChange={(e) => {
+                      setcompanyname(e.target.value);
                     }}
                   />
                 </div>
@@ -81,8 +112,8 @@ const Job = () => {
                       className="outline-none border border-pink-200 focus:border-pink-400 rounded-lg p-3"
                       placeholder="e.g New York,NY or Remote..."
                       value={location}
-                      onChange={(e) =>{
-                        setlocation(e.target.value)
+                      onChange={(e) => {
+                        setlocation(e.target.value);
                       }}
                     />
                   </div>
@@ -93,7 +124,9 @@ const Job = () => {
                     </label>
                     <select
                       className="outline-none border border-pink-200 focus:border-pink-400 rounded-lg p-3"
-                      name="Select job type" value={jobtype} onChange={(e) => setjobtype(e.target.value)}
+                      name="Select job type"
+                      value={jobtype}
+                      onChange={(e) => setjobtype(e.target.value)}
                     >
                       <option value="Full-Time">Full-Time</option>
                       <option value="Internship">Internship</option>
@@ -110,10 +143,11 @@ const Job = () => {
                     </label>
                     <input
                       type="number"
+                      min={0}
                       className="outline-none border border-pink-200 focus:border-pink-400 rounded-lg p-3"
                       placeholder="e.g 2 (for 2 years of experience)"
                       value={experience}
-                      onChange={(e)=>setexperience(Number(e.target.value))}
+                      onChange={(e) => setexperience(Number(e.target.value))}
                     />
                   </div>
 
@@ -123,6 +157,7 @@ const Job = () => {
                     </label>
                     <input
                       type="number"
+                      min={0}
                       className="outline-none border border-pink-200 focus:border-pink-400 rounded-lg p-3"
                       placeholder="e.g $80,000 - $120,000"
                       value={salary}
