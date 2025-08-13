@@ -9,35 +9,35 @@ const Login = () => {
 
   const navigate = useNavigate();
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, {
-      email,
-      password,
-    },{
-      withCredentials:true
-    });
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/user/login`,
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
-    setemail("");
-    setpassword("");
+      setemail("");
+      setpassword("");
 
+      if (res.data.role == "admin") {
+        window.location.href = import.meta.env.VITE_ADMIN_URL;
+      }
 
-
-    if (res.data.role == "admin") {
-       window.location.href = import.meta.env.VITE_ADMIN_URL;
+      res.data.role === "student"
+        ? navigate("/student_dashboard")
+        : navigate("/dashboard");
+    } catch (err) {
+      console.error("login Error:", err);
     }
-
-    res.data.role === "student"
-      ? navigate("/student_dashboard")
-      : navigate("/dashboard");
-
-  } catch (err) {
-    console.error("login Error:", err);
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen">
@@ -56,10 +56,7 @@ const Login = () => {
       </div>
 
       <div className="mt-12 px-4 text-center flex flex-col items-center">
-        <form onSubmit={handleSubmit}
-          action=""
-          className="w-3/4 mt-8"
-        >
+        <form onSubmit={handleSubmit} action="" className="w-3/4 mt-8">
           <input
             type="text"
             placeholder="Enter email here..."

@@ -23,7 +23,10 @@ const createpost = async (req, res) => {
         })
 
 
-        res.status(200).json({ message: "image created successfully" })
+        res.status(200).json({ 
+            message: "image created successfully",
+            role: req.user.role 
+        })
 
     } catch (error) {
         return res.status(404).json({ message: "image not created!!", error })

@@ -1,9 +1,9 @@
 const express = require('express')
-const { isloggedin } = require("../middlewares/user.middleware")
+const { isloggedin,isalumni } = require("../middlewares/user.middleware")
 const jobcontroller = require("../controllers/job.controller")
 const router = express.Router()
 
-router.post("/createjob",isloggedin,jobcontroller.createjob)
+router.post("/createjob",isloggedin,isalumni,jobcontroller.createjob)
 router.get("/showjob", jobcontroller.showjob)
 
 

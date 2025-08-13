@@ -40,13 +40,19 @@ const Create_Post = () => {
       );
 
       console.log("post created successfully", res.data);
+
+      if (res.data.role === 'alumni') {
+        navigate('/dashboard')
+      }else{
+        navigate('/student_dashboard')
+      }
+
       setmessage("");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-      navigate('/dashboard')
     } catch (error) {
-      console.log("there is error", error);
+      console.error("Error creating post:", error);
     }
   };
 
@@ -64,7 +70,7 @@ const Create_Post = () => {
           <h4 className="text-base font-medium text-gray-600">
             What's on your mind?
           </h4>
-          <form action="" className="flex flex-col" onSubmit={handlesubmit}>
+          <form className="flex flex-col" onSubmit={handlesubmit}>
             <textarea
               placeholder="Enter description here..."
               className="w-full h-28 text-base p-2 border border-pink-200 hover:border-pink-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-400 rounded-md outline-none"

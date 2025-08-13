@@ -30,5 +30,25 @@ const isloggedin = async (req, res, next) => {
 }
 
 
+const isalumni = (req,res,next) => {
 
-module.exports = { isloggedin }
+    if(req.user.role !== 'alumni'){
+        return res.status(401).json({message:"access denied,alumni only"})
+    }
+
+    next()
+
+}
+
+const isstudent = (req,res,next) => {
+
+    if(req.user.role !== 'student'){
+        return res.status(401).json({message:"access denied,student only"})
+    }
+
+    next()
+
+}
+
+
+module.exports = { isloggedin, isalumni, isstudent}
