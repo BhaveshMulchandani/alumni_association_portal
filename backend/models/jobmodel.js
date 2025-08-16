@@ -17,17 +17,20 @@ const Jobschema = new mongoose.Schema({
     jobtype:{
         type:String,
         enum:['Full-Time','Part-Time','Remote','Internship'],
+        default: 'Full-Time',
         required:true
     },
     experience:{
         type:Number,
         required:true,
-        min:0
+        min:0,
+        default:0
     },
     salary:{
         type:Number,
         required:false,
-        min:0
+        min:0,
+        default:25000
     },
     jobdescription:{
         type:String,

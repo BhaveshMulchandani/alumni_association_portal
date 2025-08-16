@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar_alumni from "../../componenets/Navbar_alumni";
-import axios from 'axios'
+import axios from "axios";
 
 const Job = () => {
   const [jobtitle, setjobtitle] = useState("");
@@ -25,8 +25,8 @@ const Job = () => {
           jobtype,
           experience,
           salary,
-          jobdescription:description,
-          applicationlink:url,
+          jobdescription: description,
+          applicationlink: url,
         },
         {
           withCredentials: true,
@@ -192,7 +192,20 @@ const Job = () => {
                 </div>
 
                 <div className="flex justify-end space-x-4 pt-6">
-                  <button className="border border-pink-200 text-gray-600 hover:bg-pink-50 rounded-md p-2 text-base">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setjobtitle("");
+                      setcompanyname("");
+                      setlocation("");
+                      setjobtype("Full-Time");
+                      setexperience(0);
+                      setsalary(25000);
+                      setdescription("");
+                      seturl("");
+                    }}
+                    className="border border-pink-200 text-gray-600 hover:bg-pink-50 rounded-md p-2 text-base"
+                  >
                     Cancel
                   </button>
                   <button

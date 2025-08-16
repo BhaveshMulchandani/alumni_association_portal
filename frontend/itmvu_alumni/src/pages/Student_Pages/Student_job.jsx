@@ -44,6 +44,13 @@ const Student_job = () => {
     fetchjobs();
   }, []);
 
+  const stats = [
+  { number: jobs.length, label: "Active Jobs", color: "text-pink-500" },
+  { number: jobs.filter((job) => job.jobtype ==='Internship').length , label: "Internships", color: "text-blue-500" },
+  { number: jobs.filter((job) => job.jobtype ==='Remote').length, label: "Remote Jobs", color: "text-emerald-500" },
+  { number: jobs.filter((job) => job.postedby.role === 'alumni').length, label: "Alumni Posted", color: "text-violet-500" },
+];
+
   return (
     <>
       <Navbar_student />
@@ -58,25 +65,14 @@ const Student_job = () => {
           </div>
 
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-6 flex flex-col items-center justify-center bg-white rounded-lg border border-pink-200 shadow-sm">
-              <h1 className="text-pink-500 font-bold text-2xl">6</h1>
-              <h4 className="text-gray-600 text-sm">Active Jobs</h4>
+          {
+            stats.map((stat,index)=>(
+              <div key={index} className="p-6 flex flex-col items-center justify-center bg-white rounded-lg border border-pink-200 shadow-sm">
+              <h1 className={`${stat.color} font-bold text-2xl`}>{stat.number}</h1>
+              <h4 className="text-gray-600 text-sm">{stat.label}</h4>
             </div>
-
-            <div className="p-6 flex flex-col items-center justify-center bg-white rounded-lg border border-pink-200 shadow-sm">
-              <h1 className="text-blue-500 font-bold text-2xl">2</h1>
-              <h4 className="text-gray-600 text-sm">Internships</h4>
-            </div>
-
-            <div className="p-6 flex flex-col items-center justify-center bg-white rounded-lg border border-pink-200 shadow-sm">
-              <h1 className="text-emerald-500 font-bold text-2xl">1</h1>
-              <h4 className="text-gray-600 text-sm">Remote Jobs</h4>
-            </div>
-
-            <div className="p-6 flex flex-col items-center justify-center bg-white rounded-lg border border-pink-200 shadow-sm">
-              <h1 className="text-violet-500 font-bold text-2xl">4</h1>
-              <h4 className="text-gray-600 text-sm">Alumni Posted</h4>
-            </div>
+            ))
+          }
           </div>
 
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

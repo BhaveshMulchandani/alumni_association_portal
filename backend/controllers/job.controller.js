@@ -3,7 +3,7 @@ const jobmodel = require('../models/jobmodel')
 const createjob = async (req, res) => {
     const { jobtitle, companyname, location, jobtype, experience, salary, jobdescription, applicationlink } = req.body
 
-    if (!jobtitle || !companyname || !location || !jobtype || !experience || !jobdescription || !applicationlink) {
+    if (!jobtitle || !companyname || !location || !jobtype || experience === undefined || !jobdescription || !applicationlink) {
         return res.status(404).json({ message: "please enter valid credentials" })
     }
 
