@@ -1,12 +1,14 @@
 const usermodel = require('../models/usermodel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const {Profile, StudentProfile, AlumniProfile} = require('../models/profilemodel')
+
 
 const signup = async (req, res) => {
 
     const { username, email, passingyear, stream, password, role } = req.body
 
-    if (!username || !email || !password || !role || !passingyear || !stream) {
+    if (!username || !email || !password || !role || !passingyear || (role === 'student' && !stream)) {
         return res.status(401).json({ message: "missing credentials , enter valid credentials !!" })
     }
     try {
@@ -29,10 +31,30 @@ const signup = async (req, res) => {
             role,
         })
 
-        return res.status(201).json({ message: "user created successfully" })
+
+        let profileData = {
+            user: user._id,
+            role,
+            name: username,
+            passingyear
+        };
+
+        let profile 
+
+        if (role === 'student') {
+            profileData.department = stream;
+            profile = await StudentProfile.create(profileData)
+        }else if (role === 'alumni') {
+
+            profile = await AlumniProfile.create(profileData)
+        }
+
+        return res.status(201).json({ message: "user and profile  created successfully" })
 
 
     } catch (error) {
+        console.log(error);
+        
         return res.status(500).json({ message: "internal server error" })
 
     }
@@ -85,15 +107,15 @@ const admin = async (req, res) => {
         const admin = await usermodel.create({
 
             username: "Admin",
-            email:"admin@me.com",
+            email: "admin@me.com",
             password: hashpassword,
             role: "admin"
         })
 
-        res.status(201).json({message:"admin created successfully"})
+        res.status(201).json({ message: "admin created successfully" })
     } catch (error) {
-          res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal server error" });
     }
 }
 
-module.exports = { signup, login , admin }
+module.exports = { signup, login, admin }
