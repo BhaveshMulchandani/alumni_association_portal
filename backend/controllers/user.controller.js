@@ -1,7 +1,7 @@
 const usermodel = require('../models/usermodel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {Profile, StudentProfile, AlumniProfile} = require('../models/profilemodel')
+const { Profile, StudentProfile, AlumniProfile } = require('../models/profilemodel')
 
 
 const signup = async (req, res) => {
@@ -39,22 +39,22 @@ const signup = async (req, res) => {
             passingyear
         };
 
-        let profile 
+        let profile
 
         if (role === 'student') {
             profileData.department = stream;
             profile = await StudentProfile.create(profileData)
-        }else if (role === 'alumni') {
+
+            return res.status(200).json({ message: "student profile created successfully", user, profile })
+        } else if (role === 'alumni') {
 
             profile = await AlumniProfile.create(profileData)
+
+            return res.status(200).json({ message: "alumni profile created successfully", user, profile })
         }
-
-        return res.status(201).json({ message: "user and profile  created successfully" })
-
-
     } catch (error) {
         console.log(error);
-        
+
         return res.status(500).json({ message: "internal server error" })
 
     }

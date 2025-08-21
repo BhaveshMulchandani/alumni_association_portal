@@ -27,6 +27,8 @@ const Signup = () => {
         role,
       });
 
+       console.log(res.data);
+
       setusername("");
       setemail("");
       setpassingyear("");

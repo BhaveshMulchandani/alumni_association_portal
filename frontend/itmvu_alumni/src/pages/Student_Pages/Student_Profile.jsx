@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar_student from "../../componenets/Navbar_student";
 
 const Student_Profile = () => {
