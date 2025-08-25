@@ -1,6 +1,18 @@
 import Navbar_alumni from "../../componenets/Navbar_alumni";
+import Profilecontext from "../../context/Profilecontext";
+import { useContext } from "react";
+
 
 const Profile = () => {
+  const { profile } = useContext(Profilecontext);
+
+  if (!profile) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-2xl text-gray-600">No profile loaded yet</h1>
+      </div>
+    );
+  }
   return (
     <>
       <Navbar_alumni />
@@ -34,10 +46,12 @@ const Profile = () => {
                 />
                 <div>
                   <h2 className="text-gray-800 font-semibold text-lg">
-                    Bhavesh Mulchandani
+                    {profile.name}
                   </h2>
                   <h4 className="text-gray-600 text-base">Passing Year</h4>
-                  <h4 className="text-gray-700 font-medium text-base">2026</h4>
+                  <h4 className="text-gray-700 font-medium text-base">
+                    {profile.passingyear}
+                  </h4>
                 </div>
               </div>
               <div className="mt-2">

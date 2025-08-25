@@ -1,6 +1,19 @@
+import { useContext } from "react";
+import Profilecontext from "../../context/Profilecontext.jsx";
 import Navbar_student from "../../componenets/Navbar_student";
 
 const Student_Profile = () => {
+
+  const { profile } = useContext(Profilecontext);
+
+  if (!profile) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-2xl text-gray-600">No profile loaded yet</h1>
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar_student />
@@ -38,13 +51,13 @@ const Student_Profile = () => {
                 />
                 <div>
                   <h2 className="text-gray-800 font-semibold text-lg">
-                    Bhavesh Mulchandani
+                    {profile.name}
                   </h2>
                   <h4 className="text-gray-600 text-base">
-                    Computer Science Engineering
+                    {profile.department}
                   </h4>
                   <h4 className="text-pink-700 font-medium text-base">
-                    3rd Year
+                    {profile.passingyear}
                   </h4>
                 </div>
               </div>
