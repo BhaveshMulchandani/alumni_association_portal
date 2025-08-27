@@ -1,9 +1,32 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../assets/logo.png";
-import { Link, Links } from "react-router-dom";
+import { Link, Links, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useContext } from "react";
+import Profilecontext from "../context/Profilecontext";
 
 const Navbar = () => {
   const [search, setsearch] = useState("");
+
+  const { setProfile } = useContext(Profilecontext);
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/user/logout`,
+        {},
+        { withCredentials: true }
+      );
+
+      setProfile(null);
+      localStorage.removeItem("profile");
+      navigate("/signup");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="w-full bg-pink-900 h-20 flex px-4 justify-around items-center fixed z-50">
@@ -63,7 +86,10 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <button className="bg-white text-xl text-pink-900 border-2 border-pink-900 px-3 py-1 rounded-md flex items-center">
+        <button
+          onClick={logout}
+          className="bg-white text-xl text-pink-900 border-2 border-pink-900 px-3 py-1 rounded-md flex items-center"
+        >
           Logout
         </button>
       </div>

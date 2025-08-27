@@ -94,6 +94,13 @@ const login = async (req, res) => {
     }
 }
 
+const logout = async (req,res) => {
+
+    res.clearCookie("token")
+
+    return res.status(200).json({message:"you are loggedout!!"})
+}
+
 
 const admin = async (req, res) => {
     try {
@@ -118,4 +125,4 @@ const admin = async (req, res) => {
     }
 }
 
-module.exports = { signup, login, admin }
+module.exports = { signup, login, admin, logout }
