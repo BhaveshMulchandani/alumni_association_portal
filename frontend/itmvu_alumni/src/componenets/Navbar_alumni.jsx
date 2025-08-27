@@ -19,7 +19,7 @@ const Navbar = () => {
 
       setProfile(null);
       localStorage.removeItem("profile");
-      navigate("/signup");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }

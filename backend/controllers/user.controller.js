@@ -86,7 +86,14 @@ const login = async (req, res) => {
 
         res.cookie("token", token, { expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7) })
 
-        return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role, profile:user.profile })
+        let profile
+        if (user.role === "student") {
+            profile = await StudentProfile.findOne({ user: user._id })
+        } else if (user.role === "alumni") {
+            profile = await AlumniProfile.findOne({ user: user._id })
+        }
+
+        return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role, profile })
 
     } catch (error) {
         return res.status(500).json({ message: "internal server error" })

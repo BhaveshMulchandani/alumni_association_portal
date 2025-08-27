@@ -2,12 +2,14 @@ import { useState } from "react";
 import logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Profilecontext from "../context/Profilecontext.jsx";
+import { useContext } from "react";
 
 const Login = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-
   const navigate = useNavigate();
+ const { setProfile } = useContext(Profilecontext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +25,11 @@ const Login = () => {
           withCredentials: true,
         }
       );
+
+
+      setProfile(res.data.profile);
+      localStorage.setItem("profile", JSON.stringify(res.data.profile));
+
 
       setemail("");
       setpassword("");
