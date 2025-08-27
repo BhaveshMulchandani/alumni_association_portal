@@ -37,6 +37,8 @@ const Signup = () => {
       console.log(res.data);
 
       setProfile(res.data.profile);
+      
+      localStorage.setItem("profile", JSON.stringify(res.data.profile));
 
       setusername("");
       setemail("");

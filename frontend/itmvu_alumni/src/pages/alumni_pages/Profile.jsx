@@ -13,6 +13,7 @@ const Profile = () => {
       </div>
     );
   }
+  
   return (
     <>
       <Navbar_alumni />
