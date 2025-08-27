@@ -86,7 +86,7 @@ const login = async (req, res) => {
 
         res.cookie("token", token, { expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7) })
 
-        return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role })
+        return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role, profile:user.profile })
 
     } catch (error) {
         return res.status(500).json({ message: "internal server error" })
