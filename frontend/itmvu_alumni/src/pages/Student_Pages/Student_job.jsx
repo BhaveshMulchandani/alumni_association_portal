@@ -48,7 +48,7 @@ const Student_job = () => {
   { number: jobs.length, label: "Active Jobs", color: "text-pink-500" },
   { number: jobs.filter((job) => job.jobtype ==='Internship').length , label: "Internships", color: "text-blue-500" },
   { number: jobs.filter((job) => job.jobtype ==='Remote').length, label: "Remote Jobs", color: "text-emerald-500" },
-  { number: jobs.filter((job) => job.postedby.role === 'alumni').length, label: "Alumni Posted", color: "text-violet-500" },
+  { number: jobs.filter((job) => job.postedby?.role === 'alumni').length, label: "Alumni Posted", color: "text-violet-500" },
 ];
 
   return (
