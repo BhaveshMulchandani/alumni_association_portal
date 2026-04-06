@@ -101,11 +101,11 @@ const login = async (req, res) => {
     }
 }
 
-const logout = async (req,res) => {
+const logout = async (req, res) => {
 
     res.clearCookie("token")
 
-    return res.status(200).json({message:"you are loggedout!!"})
+    return res.status(200).json({ message: "you are loggedout!!" })
 }
 
 
@@ -132,4 +132,28 @@ const admin = async (req, res) => {
     }
 }
 
-module.exports = { signup, login, admin, logout }
+const toggleAvailability = async (req, res) => {
+    if (req.user.role !== 'alumni') {
+        return res.status(403).json({ message: "Only alumni allowed" });
+    }
+    try {
+        const userId = req.user.id;
+        const { isAvailable } = req.body;
+
+        const user = await usermodel.findByIdAndUpdate(
+            userId,
+            { isAvailable },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            message: "Availability updated",
+            isAvailable: user.isAvailable
+        });
+
+    } catch (error) {
+        return res.status(500).json({ message: "internal server error" });
+    }
+};
+
+module.exports = { signup, login, admin, logout, toggleAvailability }

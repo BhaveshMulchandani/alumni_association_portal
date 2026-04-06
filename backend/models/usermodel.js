@@ -19,6 +19,10 @@ const Userschema = new mongoose.Schema({
     },
     role : { type:String,
         enum : ["student","alumni","admin"]
+    },
+      isAvailable: {
+        type: Boolean,
+        default: false
     }
 })
 

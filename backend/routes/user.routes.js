@@ -6,5 +6,6 @@ router.post('/signup',usercontroller.signup)
 router.post('/login',usercontroller.login)
 router.post('/admin-setup',usercontroller.admin)
 router.post('/logout',usercontroller.logout)
+router.patch('/availability', authMiddleware, toggleAvailability);
 
 module.exports = router
