@@ -10,6 +10,7 @@ const sessionroutes = require('./routes/session.routes')
 const chatroutes = require('./routes/chat.routes')
 const cookieparser = require('cookie-parser')
 const cors = require('cors')
+require('./corn/session.corn');
 
 app.use(cors({
   origin:[ 'http://localhost:5173', 'http://localhost:5174' ], 
