@@ -68,6 +68,14 @@ const sendmessage = async (req, res) => {
             message: req.body.message
         })
 
+        const io = req.app.get('io');
+
+        io.to(req.params.sessionId).emit('receive_message', {
+            sessionId: req.params.sessionId,
+            message: newmessage.message,
+            sender: req.user._id
+        });
+
         return res.status(201).json({ message: "Message sent successfully", newmessage })
 
 
