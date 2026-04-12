@@ -6,7 +6,6 @@ import Login from './pages/Login'
 import Job from './pages/alumni_pages/Job'
 import Profile from './pages/alumni_pages/Profile'
 import Events from './pages/Student_Pages/Events'
-import Home from './pages/alumni_pages/Home'
 import Create_Post from './componenets/Create_Post'
 import Mentorship from './pages/alumni_pages/Mentorship'
 import Donation from './pages/alumni_pages/Donation'
@@ -14,14 +13,13 @@ import Student_Profile from './pages/Student_Pages/Student_Profile'
 import Student_job from './pages/Student_Pages/Student_job'
 import Student_Post from './pages/Student_Pages/Student_Post'
 import Post from './pages/alumni_pages/Post'
+import Home from './pages/Home'
 
 const App = () => {
-
-  const role = localStorage.getItem("role");
   return (
     <>
        <Routes>
-        <Route path='/' element={<Signup/>}/>
+        <Route path='/' element={<Home/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
