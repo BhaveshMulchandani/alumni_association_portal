@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar_student from "../../componenets/Navbar_student";
 import axios from "axios";
 
 function getTimeAgo(dateString) {
@@ -53,8 +52,7 @@ const Student_job = () => {
 
   return (
     <>
-      <Navbar_student />
-      <div className="min-h-screen bg-gray-50 px-16 py-28">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-pink-50 px-16 py-10">
         <div className="max-w-full mx-auto">
           <div>
             <h1 className="text-gray-800 font-bold text-3xl">Job Board</h1>
@@ -75,9 +73,9 @@ const Student_job = () => {
           }
           </div>
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="mt-6 w-full flex flex-col gap-4">
             {jobs.map((job)=>(
-              <div key={job._id} className="w-full max-w-4xl p-5 bg-white border border-pink-200 rounded-xl shadow-sm mx-3">
+              <div key={job._id} className="w-full p-5 bg-white border border-pink-200 rounded-xl shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div className="flex flex-col md:flex-row md:items-center gap-2">
                     <h1 className="text-gray-800 font-medium text-xl">

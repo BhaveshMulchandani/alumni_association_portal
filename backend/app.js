@@ -16,7 +16,7 @@ const cookieparser = require('cookie-parser');
 const cors = require('cors');
 
 // 🔥 CRON (auto expiry)
-require('./cron/session.corn');
+require('./corn/session.corn');
 
 // middlewares
 app.use(cors({
