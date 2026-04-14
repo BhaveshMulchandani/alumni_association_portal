@@ -42,9 +42,9 @@ const Create_Post = () => {
       console.log("post created successfully", res.data);
 
       if (res.data.role === 'alumni') {
-        navigate('/dashboard')
+        navigate('/alumni/dashboard')
       }else{
-        navigate('/student_dashboard')
+        navigate('/student/dashboard')
       }
 
       setmessage("");
@@ -58,7 +58,7 @@ const Create_Post = () => {
 
   return (
     <>
-      <div className="h-screen w-full bg-gray-50 px-96 py-28">
+      <div className="h-screen w-full bg-gradient-to-br from-pink-50 via-white to-pink-50  px-16 py-10">
         <div className="space-y-1">
           <h1 className="text-gray-800 font-bold text-3xl">Create a Post</h1>
           <h4 className="text-gray-600 text-base">

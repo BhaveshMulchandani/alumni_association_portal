@@ -1,4 +1,4 @@
-import Navbar_alumni from "../../componenets/Navbar_alumni";
+
 import { Switch } from "@headlessui/react";
 import { useState } from "react";
 
@@ -6,7 +6,7 @@ const Mentorship = () => {
   const [enabled, setEnabled] = useState(false);
   return (
     <>
-      <Navbar_alumni />
+
       <div className="flex-1 p-8 py-28 bg-gray-50 h-screen">
         <div className="max-w-6xl mx-auto">
           <div>

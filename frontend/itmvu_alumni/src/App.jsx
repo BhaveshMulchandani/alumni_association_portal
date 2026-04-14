@@ -19,10 +19,12 @@ import Student_Profile from './pages/Student_Pages/Student_Profile';
 import Student_job from './pages/Student_Pages/Student_job';
 import Student_Post from './pages/Student_Pages/Student_Post';
 import Events from './pages/Student_Pages/Events';
+import StudentMentorship from './pages/Student_Pages/StudentMentorship';
+import Chat from './pages/Student_Pages/Chat';
 
 // Layouts
-import AlumniLayout from './componenets/Layout/Alumnilayout';
-import Studentlayout from './componenets/Layout/Studentlayout';
+import AlumniLayout from './components/Layout/Alumnilayout';
+import Studentlayout from './components/Layout/Studentlayout';
 
 const App = () => {
   return (
@@ -50,6 +52,8 @@ const App = () => {
         <Route path='job' element={<Student_job />} />
         <Route path='post' element={<Student_Post />} />
         <Route path='event' element={<Events />} />
+        <Route path='mentorship' element={<StudentMentorship />} />
+        <Route path='messages' element={<Chat />} /> 
       </Route>
 
     </Routes>

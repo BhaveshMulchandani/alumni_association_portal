@@ -1,13 +1,11 @@
 import React from "react";
-import Navbar_student from "../../componenets/Navbar_student";
 
 const Events = () => {
   return (
     <>
-      <Navbar_student />
-      <div className="h-screen bg-gray-50 py-28 px-6">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-pink-50 px-16 py-10">
         <div className="max-w-full mx-auto">
-          <div className="px-10 space-y-2">
+          <div className="space-y-2">
             <h1 className="text-3xl text-gray-800 font-bold">
               Upcoming Events
             </h1>
@@ -16,7 +14,7 @@ const Events = () => {
               on campus.
             </h4>
           </div>
-          <div className=" px-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
             <div className="bg-white rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <span className="bg-blue-100 text-blue-600 font-medium text-sm rounded-full p-2">college event</span>

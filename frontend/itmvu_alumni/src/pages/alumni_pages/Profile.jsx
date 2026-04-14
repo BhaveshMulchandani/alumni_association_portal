@@ -1,4 +1,4 @@
-import Navbar_alumni from "../../componenets/Navbar_alumni";
+
 import Profilecontext from "../../context/Profilecontext";
 import { useContext } from "react";
 
@@ -16,7 +16,6 @@ const Profile = () => {
   
   return (
     <>
-      <Navbar_alumni />
       <div className="p-8 py-28 bg-gray-50 h-screen">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3">

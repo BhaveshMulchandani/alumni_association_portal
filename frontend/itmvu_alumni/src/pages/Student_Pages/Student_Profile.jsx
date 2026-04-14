@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import Profilecontext from "../../context/Profilecontext.jsx";
-import Navbar_student from "../../componenets/Navbar_student";
 
 const Student_Profile = () => {
 
@@ -16,8 +15,7 @@ const Student_Profile = () => {
 
   return (
     <>
-      <Navbar_student />
-      <div className="p-8 py-28 bg-gray-50 min-h-screen">
+      <div className="p-8 bg-gradient-to-br from-pink-50 via-white to-pink-50 min-h-screen">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-3">

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar_alumni from "../../componenets/Navbar_alumni";
 import axios from "axios";
 
 const Job = () => {
@@ -48,7 +47,6 @@ const Job = () => {
 
   return (
     <>
-      <Navbar_alumni />
       <div className="mx-auto px-6 py-28 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center space-x-3 mb-4">

@@ -59,7 +59,7 @@ const Studentsidenavbar = () => {
           </li>
 
           <li>
-            <NavLink to="/student/create-post" className={linkClasses}>
+            <NavLink to="/student/post" className={linkClasses}>
               <PlusCircle className="w-5 h-5" />
               <span>Create Post</span>
             </NavLink>

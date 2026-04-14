@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Navbar_alumni from "../../componenets/Navbar_alumni";
 import axios from "axios";
 
 const Dashboard = () => {
@@ -38,7 +37,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <Navbar_alumni />
       <div className="py-28">
         <h1 className="text-pink-600 flex justify-center mt-5 text-3xl font-semibold">
           Welcome Back Bhavesh Mulchandani

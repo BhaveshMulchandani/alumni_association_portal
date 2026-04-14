@@ -1,7 +1,6 @@
 import { useState } from "react";
-import Navbar_alumni from "../../componenets/Navbar_alumni";
-import Donation_Type from "../../componenets/Donation_Type";
-import Donation_Amount from "../../componenets/Donation_Amount";
+import Donation_Type from "../../components/Donation_Type";
+import Donation_Amount from "../../components/Donation_Amount";
 
 const Donation = () => {
   const [amount, setamount] = useState(null);
@@ -10,7 +9,6 @@ const Donation = () => {
 
   return (
     <>
-      <Navbar_alumni />
       <div className="p-8 py-28 bg-gray-50 min-h-screen">
         <div className="max-w-full mx-auto">
           <div className="flex justify-center items-center space-x-4">
