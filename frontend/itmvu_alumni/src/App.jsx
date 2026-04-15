@@ -6,7 +6,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 
 // Alumni Pages
-import Dashboard from './pages/alumni_pages/Dashboard';
+import AlumniDashboard from './pages/alumni_pages/AlumniDashboard';
 import Job from './pages/alumni_pages/Job';
 import Profile from './pages/alumni_pages/Profile';
 import Mentorship from './pages/alumni_pages/Mentorship';
@@ -37,7 +37,7 @@ const App = () => {
 
       {/* Alumni Routes */}
       <Route path='/alumni' element={<AlumniLayout />}>
-        <Route path='dashboard' element={<Dashboard />} />
+        <Route path='dashboard' element={<AlumniDashboard />} />
         <Route path='job' element={<Job />} />
         <Route path='profile' element={<Profile />} />
         <Route path='mentorship' element={<Mentorship />} />

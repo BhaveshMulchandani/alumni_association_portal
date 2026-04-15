@@ -47,8 +47,8 @@ const Job = () => {
 
   return (
     <>
-      <div className="mx-auto px-6 py-28 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
+      <div className="mx-auto p-8 bg-gradient-to-br from-pink-50 via-white to-pink-50">
+        <div className="max-w-8xl mx-auto">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-14 h-14 bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg flex items-center justify-center">
               <i className="ri-briefcase-3-line text-3xl text-white"></i>

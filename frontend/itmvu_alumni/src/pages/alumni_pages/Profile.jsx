@@ -16,7 +16,7 @@ const Profile = () => {
   
   return (
     <>
-      <div className="p-8 py-28 bg-gray-50 h-screen">
+      <div className="p-8 bg-gradient-to-br from-pink-50 via-white to-pink-50 h-screen">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3">
             <div className="w-14 h-14 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex items-center justify-center">
