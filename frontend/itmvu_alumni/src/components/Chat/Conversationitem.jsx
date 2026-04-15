@@ -3,11 +3,11 @@ const Conversationitem = ({ convo, isActive, onClick }) => {
     <button
       type="button"
       onClick={onClick}
-      className={`w-full flex items-center space-x-3 px-4 py-3 hover:bg-pink-50 transition-colors text-left ${
-        isActive ? "bg-pink-50 border-l-3 border-pink-400" : ""
+      className={`w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left border-l-4 ${
+        isActive ? "bg-blue-50 border-pink-500" : "border-transparent"
       }`}
     >
-      <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0">
+      <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0">
         {convo.avatar}
       </div>
       <div className="flex-1 min-w-0">

@@ -20,7 +20,7 @@ import Student_job from './pages/Student_Pages/Student_job';
 import Student_Post from './pages/Student_Pages/Student_Post';
 import Events from './pages/Student_Pages/Events';
 import StudentMentorship from './pages/Student_Pages/StudentMentorship';
-import Chat from './pages/Student_Pages/Chat';
+import Chat from './pages/Chat';
 
 // Layouts
 import AlumniLayout from './components/Layout/Alumnilayout';
@@ -43,6 +43,7 @@ const App = () => {
         <Route path='mentorship' element={<Mentorship />} />
         <Route path='donate' element={<Donation />} />
         <Route path='post' element={<Post />} />
+        <Route path='messages' element={<Chat />} /> 
       </Route>
 
       {/* Student Routes */}

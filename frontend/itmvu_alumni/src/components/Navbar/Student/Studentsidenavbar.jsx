@@ -12,7 +12,7 @@ const Studentsidenavbar = () => {
     }`;
 
   return (
-    <aside className="w-64 bg-white border-r border-pink-100 min-h-screen">
+    <aside className="w-64 bg-white border-r border-pink-100 h-full">
       <nav className="p-6">
         <ul className="space-y-2">
 

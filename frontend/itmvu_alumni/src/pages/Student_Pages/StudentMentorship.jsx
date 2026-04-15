@@ -63,7 +63,7 @@ const StudentMentorship = () => {
                   View Requests
                 </button>
                 <Link
-                  to="/chat"
+                  to="/student/messages"
                   className="inline-flex items-center gap-2 rounded-md bg-white text-pink-600 hover:bg-pink-50 font-semibold shadow-sm px-4 py-2 text-sm"
                 >
                   <MessageCircle className="w-4 h-4" />
@@ -497,7 +497,7 @@ const SessionsTab = () => (
               </span>
               {s.status === "Active" && (
                 <Link
-                  to="/chat"
+                  to="/student/messages"
                   className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-pink-400 to-pink-500 text-white text-xs px-3 py-2"
                 >
                   <MessageCircle className="w-3.5 h-3.5 mr-1" />

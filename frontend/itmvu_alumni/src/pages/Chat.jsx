@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import Chatlayout from "../../components/Chat/Chatlayout";
+import Chatlayout from "../components/Chat/Chatlayout";
 
 const conversations = [
   { id: 1, name: "Rahul Verma", avatar: "RV", lastMsg: "Sure, let's discuss React hooks.", time: "2m ago", unread: 2 },
