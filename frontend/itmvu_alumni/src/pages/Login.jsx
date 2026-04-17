@@ -1,32 +1,51 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GraduationCap, Eye, EyeOff } from "lucide-react";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Mock authentication - in real app, this would validate credentials
-    if (email && password) {
-      // Mock role-based routing
-      if (email.includes("admin")) {
-        navigate("/admin-dashboard");
-      } else if (email.includes("alumni")) {
-        navigate("/alumni-dashboard");
-      } else {
-        navigate("/student-dashboard");
+    setError("");
+    setLoading(true);
+
+    try {
+      if (!email || !password) {
+        setError("Please fill in all fields");
+        setLoading(false);
+        return;
       }
+
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, { email, password });
+      
+
+      if (response.status === 201) {
+        // Clear form fields
+        setEmail("");
+        setPassword("");
+
+        // Navigate based on role
+        response.data.role === "alumni" ? navigate("/alumni/dashboard") : navigate("/student/dashboard");
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || "Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-pink-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-pink-100">
+    <div className="min-h-screen bg-pink-50 flex flex-col">
+      <header className="bg-white border-b border-pink-100">
         <div className="container mx-auto px-6 py-4">
           <Link to="/" className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg flex items-center justify-center">
@@ -43,30 +62,35 @@ const Login = () => {
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm shadow-xl border-0 bg-white/90 backdrop-blur-sm">
-            <div className="flex flex-col space-y-1.5 p-6 text-center space-y-2">
-              <h3 className="text-2xl font-semibold leading-none tracking-tight text-3xl font-bold text-gray-800">Welcome Back</h3>
-              <p className="text-sm text-muted-foreground text-gray-600">
+          <div className="rounded-lg border bg-white shadow-lg">
+            <div className="flex flex-col p-6 text-center space-y-2">
+              <h3 className="text-2xl font-bold text-gray-800">Welcome Back</h3>
+              <p className="text-sm text-gray-600">
                 Sign in to your Alumni Connect account
               </p>
+              {error && (
+                <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
+                  {error}
+                </div>
+              )}
             </div>
             <div className="p-6 pt-0">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email Address</label>
+                  <label htmlFor="email" className="text-sm font-medium">Email Address</label>
                   <input
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-12 border-pink-200 focus:border-pink-400"
+                    className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+                  <label htmlFor="password" className="text-sm font-medium">Password</label>
                   <div className="relative">
                     <input
                       id="password"
@@ -74,7 +98,7 @@ const Login = () => {
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-12 border-pink-200 focus:border-pink-400 pr-12"
+                      className="w-full h-12 px-3 py-2 pr-12 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
                       required
                     />
                     <button
@@ -97,8 +121,8 @@ const Login = () => {
                   </Link>
                 </div>
 
-                <button type="submit" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-pink-500 text-white hover:bg-pink-600 w-full h-12 text-lg">
-                  Sign In
+                <button type="submit" className="w-full h-12 bg-pink-500 text-white rounded-md hover:bg-pink-600 text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                  {loading ? "Signing In..." : "Sign In"}
                 </button>
               </form>
 
