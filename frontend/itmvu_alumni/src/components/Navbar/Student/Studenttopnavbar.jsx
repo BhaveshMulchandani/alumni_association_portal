@@ -1,32 +1,51 @@
-import React from 'react';
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GraduationCap, LogOut } from "lucide-react";
+import axios from "axios";
 
 const Studenttopnavbar = () => {
   const location = useLocation();
-  
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/user/logout`,
+        {},
+        { withCredentials: true },
+      );
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   let subtitle = "Student Dashboard";
-  if (location.pathname.includes('/job')) {
+  if (location.pathname.includes("/job")) {
     subtitle = "Job Board";
   }
 
-  if (location.pathname.includes('/event')) {
+  if (location.pathname.includes("/event")) {
     subtitle = "Events";
   }
 
-  if (location.pathname.includes('/mentorship')) {
+  if (location.pathname.includes("/mentorship")) {
     subtitle = "Mentorship";
   }
 
-  if (location.pathname.includes('/messages')) {
+  if (location.pathname.includes("/messages")) {
     subtitle = "Messages";
   }
 
-  if (location.pathname.includes('/profile')) {
+  if (location.pathname.includes("/profile")) {
     subtitle = "Profile";
   }
 
-  if (location.pathname.includes('/create-post')) {
+  if (location.pathname.includes("/create-post")) {
     subtitle = "Create Post";
   }
 
@@ -39,13 +58,19 @@ const Studenttopnavbar = () => {
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Alumni Connect</h1>
+              <h1 className="text-xl font-bold text-gray-800">
+                Alumni Connect
+              </h1>
               <p className="text-sm text-gray-500">{subtitle}</p>
             </div>
           </Link>
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground text-gray-600 hover:text-pink-600">
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
+          <button
+            onClick={handleLogout}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-pink-600 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <LogOut className="w-4 h-4" />
+            {loading ? "Logging out..." : "Logout"}
           </button>
         </div>
       </div>

@@ -1,9 +1,12 @@
-import React from 'react'
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from 'react'
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GraduationCap, LogOut } from "lucide-react";
+import axios from "axios";
 
 const Alumnitopnavbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
     
     let subtitle = "Alumni Dashboard";
     if (location.pathname.includes('/job')) {
@@ -25,9 +28,21 @@ const Alumnitopnavbar = () => {
     if (location.pathname.includes('/create-post')) {
       subtitle = "Create Post";
     }
+
+    const handleLogout = async () => {
+      setLoading(true);
+      try {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/logout`, {}, { withCredentials: true });
+        navigate("/login");
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
   return (
 
-      <header className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-50">
+      <header className="bg-white border-b border-pink-100 sticky top-0 z-50">
           <div className="container mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <Link to="/" className="flex items-center space-x-3">
@@ -39,9 +54,13 @@ const Alumnitopnavbar = () => {
                   <p className="text-sm text-gray-500">{subtitle}</p>
                 </div>
               </Link>
-              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground text-gray-600 hover:text-pink-600">
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
+              <button 
+                onClick={handleLogout}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-pink-600 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <LogOut className="w-4 h-4" />
+                {loading ? "Logging out..." : "Logout"}
               </button>
             </div>
           </div>
