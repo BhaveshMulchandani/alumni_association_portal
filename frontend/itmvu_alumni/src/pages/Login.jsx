@@ -25,7 +25,9 @@ const Login = () => {
         return;
       }
 
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, { email, password }, {
+        withCredentials: true
+      });
       
 
       if (response.status === 201) {

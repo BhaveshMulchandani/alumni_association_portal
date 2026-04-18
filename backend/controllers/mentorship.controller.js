@@ -73,7 +73,8 @@ const viewrequests = async (req, res) => {
         }
 
     } catch (error) {
-        return res.status(500).json({ message: "Some error occurred while fetching mentorship requests" });
+        console.log(error);
+        return res.status(500).json({ message: "Some error occurred while fetching mentorship requests", error });
     }
 }
 

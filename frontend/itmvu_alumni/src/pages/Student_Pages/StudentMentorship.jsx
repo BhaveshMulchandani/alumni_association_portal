@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   GraduationCap,
   Home,
@@ -17,6 +18,30 @@ import {
 
 const StudentMentorship = () => {
   const [activeTab, setActiveTab] = useState("mentors");
+  const [mentors, setMentors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchAvailableMentors();
+  }, []);
+
+  const fetchAvailableMentors = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/mentorship/availablementors`,
+        { withCredentials: true }
+      );
+      setMentors(response.data.mentors);
+      setError(null);
+    } catch (err) {
+      setError("Failed to load mentors. Please try again.");
+      console.error("Error fetching mentors:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const stats = [
     { label: "Available Mentors", value: "18", color: "text-pink-500" },
@@ -105,7 +130,7 @@ const StudentMentorship = () => {
             </div>
 
             {activeTab === "mentors" && (
-              <BrowseMentorsTab onNavigate={setActiveTab} />
+              <BrowseMentorsTab mentors={mentors} loading={loading} error={error} onNavigate={setActiveTab} />
             )}
             {activeTab === "requests" && <RequestsTab />}
             {activeTab === "sessions" && <SessionsTab />}
@@ -117,75 +142,39 @@ const StudentMentorship = () => {
 };
 
 
-const mentors = [
-  {
-    id: 1,
-    name: "Dr. Ananya Sharma",
-    domain: "Machine Learning",
-    year: "2018",
-    bio: "Senior ML Engineer at Google with 5+ years of experience in NLP and computer vision.",
-    avatar: "AS",
-    available: true,
-  },
-  {
-    id: 2,
-    name: "Rahul Verma",
-    domain: "Full-Stack Development",
-    year: "2019",
-    bio: "Tech Lead at Microsoft. Passionate about React, Node.js, and cloud architecture.",
-    avatar: "RV",
-    available: true,
-  },
-  {
-    id: 3,
-    name: "Priya Nair",
-    domain: "Data Science",
-    year: "2017",
-    bio: "Data Scientist at Amazon. Specializes in analytics and statistical modeling.",
-    avatar: "PN",
-    available: false,
-  },
-  {
-    id: 4,
-    name: "Karthik Menon",
-    domain: "Cybersecurity",
-    year: "2016",
-    bio: "Security Architect at Cisco. Experienced in penetration testing and threat analysis.",
-    avatar: "KM",
-    available: true,
-  },
-  {
-    id: 5,
-    name: "Sneha Reddy",
-    domain: "UI/UX Design",
-    year: "2020",
-    bio: "Product Designer at Figma. Focuses on design systems and user research.",
-    avatar: "SR",
-    available: true,
-  },
-  {
-    id: 6,
-    name: "Amit Joshi",
-    domain: "DevOps & Cloud",
-    year: "2015",
-    bio: "Principal Engineer at AWS. Expert in Kubernetes, Terraform, and CI/CD pipelines.",
-    avatar: "AJ",
-    available: false,
-  },
-];
+const mentorDomains = (mentor) => mentor.stream || "General";
 
-const BrowseMentorsTab = () => {
+const BrowseMentorsTab = ({ mentors, loading, error }) => {
   const [search, setSearch] = useState("");
   const [domainFilter, setDomainFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedMentor, setSelectedMentor] = useState(null);
 
-  const domains = [...new Set(mentors.map((m) => m.domain))];
+  if (loading) {
+    return (
+      <div className="dashboard-card text-center py-16">
+        <div className="inline-block animate-spin">⏳</div>
+        <h3 className="text-lg font-semibold text-gray-600 mt-3">
+          Loading mentors...
+        </h3>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="dashboard-card text-center py-16 border-red-200 bg-red-50">
+        <h3 className="text-lg font-semibold text-red-600">{error}</h3>
+      </div>
+    );
+  }
+
+  const domains = [...new Set(mentors.map((m) => mentorDomains(m)))];
   const filtered = mentors.filter((m) => {
     const matchesSearch =
-      m.name.toLowerCase().includes(search.toLowerCase()) ||
-      m.domain.toLowerCase().includes(search.toLowerCase());
-    const matchesDomain = !domainFilter || m.domain === domainFilter;
+      m.username.toLowerCase().includes(search.toLowerCase()) ||
+      mentorDomains(m).toLowerCase().includes(search.toLowerCase());
+    const matchesDomain = !domainFilter || mentorDomains(m) === domainFilter;
     return matchesSearch && matchesDomain;
   });
 
@@ -232,38 +221,34 @@ const BrowseMentorsTab = () => {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((mentor) => (
-            <div key={mentor.id} className="dashboard-card hover-scale group border border-pink-300 rounded-lg bg-white p-5">
+            <div key={mentor._id} className="dashboard-card hover-scale group border border-pink-300 rounded-lg bg-white p-5">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                  {mentor.avatar}
+                  {mentor.username
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-gray-800 truncate">
-                    {mentor.name}
+                    {mentor.username}
                   </h4>
                   <p className="text-xs text-gray-500">
-                    {mentor.domain} · Class of {mentor.year}
+                    {mentorDomains(mentor)} · Class of {mentor.passingyear}
                   </p>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                {mentor.bio}
+              <p className="text-gray-600 text-sm mb-4">
+                Available for mentorship in {mentorDomains(mentor)}
               </p>
               <div className="flex items-center justify-between">
-                <span
-                  className={
-                    mentor.available
-                      ? "inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700"
-                      : "inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-500"
-                  }
-                >
-                  {mentor.available ? "Available" : "Not Available"}
+                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+                  Available
                 </span>
                 <button
                   type="button"
-                  disabled={!mentor.available}
                   onClick={() => openRequest(mentor)}
-                  className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-pink-400 to-pink-500 text-white hover:from-pink-500 hover:to-pink-600 text-xs px-3 py-2 disabled:opacity-40"
+                  className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-pink-400 to-pink-500 text-white hover:from-pink-500 hover:to-pink-600 text-xs px-3 py-2"
                 >
                   Request Mentorship
                 </button>
@@ -277,19 +262,45 @@ const BrowseMentorsTab = () => {
         <RequestModal
           mentor={selectedMentor}
           onClose={() => setShowModal(false)}
+          onSuccess={() => {}}
         />
       )}
     </div>
   );
 };
 
-const RequestModal = ({ mentor, onClose }) => {
+const RequestModal = ({ mentor, onClose, onSuccess }) => {
   const [topic, setTopic] = useState("");
   const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    console.log("Request sent:", { mentorId: mentor.id, topic, description });
-    onClose();
+  const handleSubmit = async () => {
+    if (!topic.trim() || !description.trim()) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/mentorship/requestmentorship`,
+        {
+          topic,
+          description,
+          alumniid: mentor._id,
+        },
+        { withCredentials: true }
+      );
+      alert("Mentorship request sent successfully!");
+      onSuccess();
+      onClose();
+    } catch (error) {
+      alert(
+        error.response?.data?.message || "Failed to send request. Try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -306,7 +317,7 @@ const RequestModal = ({ mentor, onClose }) => {
         </h3>
         <p className="text-sm text-gray-500 mb-5">
           Send a request to{" "}
-          <span className="font-medium text-pink-600">{mentor.name}</span>
+          <span className="font-medium text-pink-600">{mentor.username}</span>
         </p>
         <div className="space-y-4">
           <div>
@@ -345,9 +356,10 @@ const RequestModal = ({ mentor, onClose }) => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 text-sm"
+            disabled={loading}
+            className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-2 text-sm disabled:opacity-50"
           >
-            Send Request
+            {loading ? "Sending..." : "Send Request"}
           </button>
         </div>
       </div>

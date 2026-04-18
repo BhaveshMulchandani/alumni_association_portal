@@ -33,7 +33,7 @@ const Job = () => {
       );
       console.log("job posted successfully", res.data);
     } catch (error) {
-      console.log("failed to created job successfully", error);
+      console.log("failed to create job", error);
     }
     setjobtitle("");
     setcompanyname("");

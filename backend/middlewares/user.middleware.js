@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken')
 
 const isloggedin = async (req, res, next) => {
     const token = req.cookies.token
+    console.log(req.cookies);
+    console.log(req.token);
+    
 
     if (!token)
         return res.status(401).json({ message: "unauthorised, please login first" })
@@ -12,13 +15,13 @@ const isloggedin = async (req, res, next) => {
 
     try {
 
-        const {id,role} = jwt.verify(token, process.env.JWT_SECRET)
+        const {id} = jwt.verify(token, process.env.JWT_SECRET)
 
-        const user = await usermodel.findOne({
-            _id: id,
-            role
+        const user = await usermodel.findById(id)
 
-        })
+        if (!user) {
+            return res.status(401).json({ message: "user not found, please login again" })
+        }
 
         req.user = user
         next()

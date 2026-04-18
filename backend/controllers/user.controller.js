@@ -84,7 +84,9 @@ const login = async (req, res) => {
 
         let token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET)
 
-        res.cookie("token", token, { expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7) })
+        res.cookie("token", token, {
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        })
 
         let profile
         if (user.role === "student") {
@@ -137,7 +139,7 @@ const toggleAvailability = async (req, res) => {
         return res.status(403).json({ message: "Only alumni allowed" });
     }
     try {
-        const userId = req.user.id;
+        const userId = req.user._id;
         const { isAvailable } = req.body;
 
         const user = await usermodel.findByIdAndUpdate(

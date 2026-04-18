@@ -67,7 +67,9 @@ const Signup = () => {
         ...(role === "student" && { stream: formData.department })
       };
 
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, payload);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, payload, {
+        withCredentials: true
+      });
 
       if (response.status === 200) {
         // Clear form fields
