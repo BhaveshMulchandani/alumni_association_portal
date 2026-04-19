@@ -19,12 +19,40 @@ import {
 const StudentMentorship = () => {
   const [activeTab, setActiveTab] = useState("mentors");
   const [mentors, setMentors] = useState([]);
+  const [studentRequests, setStudentRequests] = useState([]);
+  const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchAvailableMentors();
+    fetchStudentRequests();
+    fetchSessions();
   }, []);
+
+  const fetchStudentRequests = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/mentorship/studentrequests`,
+        { withCredentials: true }
+      );
+      setStudentRequests(response.data.requests || []);
+    } catch (err) {
+      console.error("Error fetching requests:", err);
+    }
+  };
+
+  const fetchSessions = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/session`,
+        { withCredentials: true }
+      );
+      setSessions(response.data.sessions || []);
+    } catch (err) {
+      console.error("Error fetching sessions:", err);
+    }
+  };
 
   const fetchAvailableMentors = async () => {
     try {
@@ -44,9 +72,9 @@ const StudentMentorship = () => {
   };
 
   const stats = [
-    { label: "Available Mentors", value: "18", color: "text-pink-500" },
-    { label: "Sent Requests", value: "3", color: "text-blue-500" },
-    { label: "Active Sessions", value: "2", color: "text-green-500" },
+    { label: "Available Mentors", value: mentors.length.toString(), color: "text-pink-500" },
+    { label: "Sent Requests", value: studentRequests.length.toString(), color: "text-blue-500" },
+    { label: "Active Sessions", value: sessions.filter(s => s.status === 'active').length.toString(), color: "text-green-500" },
   ];
 
   const tabs = [
@@ -87,13 +115,15 @@ const StudentMentorship = () => {
                   <ClipboardList className="w-4 h-4" />
                   View Requests
                 </button>
-                <Link
-                  to="/student/messages"
-                  className="inline-flex items-center gap-2 rounded-md bg-white text-pink-600 hover:bg-pink-50 font-semibold shadow-sm px-4 py-2 text-sm"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Open Chat
-                </Link>
+                {sessions.filter(s => s.status === 'active').length > 0 && (
+                  <Link
+                    to={`/student/messages/${sessions.filter(s => s.status === 'active')[0]._id}`}
+                    className="inline-flex items-center gap-2 rounded-md bg-white text-pink-600 hover:bg-pink-50 font-semibold shadow-sm px-4 py-2 text-sm"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Open Chat
+                  </Link>
+                )}
               </div>
             </div>
 
@@ -130,10 +160,10 @@ const StudentMentorship = () => {
             </div>
 
             {activeTab === "mentors" && (
-              <BrowseMentorsTab mentors={mentors} loading={loading} error={error} onNavigate={setActiveTab} />
+              <BrowseMentorsTab mentors={mentors} loading={loading} error={error} onNavigate={setActiveTab} fetchStudentRequests={fetchStudentRequests} />
             )}
-            {activeTab === "requests" && <RequestsTab />}
-            {activeTab === "sessions" && <SessionsTab />}
+            {activeTab === "requests" && <RequestsTab studentRequests={studentRequests} />}
+            {activeTab === "sessions" && <SessionsTab sessions={sessions} />}
           </div>
         </main>
       </div>
@@ -144,7 +174,7 @@ const StudentMentorship = () => {
 
 const mentorDomains = (mentor) => mentor.stream || "General";
 
-const BrowseMentorsTab = ({ mentors, loading, error }) => {
+const BrowseMentorsTab = ({ mentors, loading, error, fetchStudentRequests }) => {
   const [search, setSearch] = useState("");
   const [domainFilter, setDomainFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -262,7 +292,7 @@ const BrowseMentorsTab = ({ mentors, loading, error }) => {
         <RequestModal
           mentor={selectedMentor}
           onClose={() => setShowModal(false)}
-          onSuccess={() => {}}
+          onSuccess={fetchStudentRequests}
         />
       )}
     </div>
@@ -367,37 +397,19 @@ const RequestModal = ({ mentor, onClose, onSuccess }) => {
   );
 };
 
-const studentRequests = [
-  {
-    id: 1,
-    mentorName: "Dr. Ananya Sharma",
-    topic: "ML career path",
-    status: "pending",
-    date: "Apr 8, 2026",
-  },
-  {
-    id: 2,
-    mentorName: "Rahul Verma",
-    topic: "React best practices",
-    status: "accepted",
-    date: "Apr 5, 2026",
-  },
-  {
-    id: 3,
-    mentorName: "Karthik Menon",
-    topic: "Cybersecurity certifications",
-    status: "rejected",
-    date: "Mar 28, 2026",
-  },
-];
-
 const statusStyles = {
   pending: "bg-yellow-100 text-yellow-700",
   accepted: "bg-green-100 text-green-700",
   rejected: "bg-red-100 text-red-700",
 };
 
-const RequestsTab = () => (
+const RequestsTab = ({ studentRequests }) => {
+  function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  }
+
+  return (
   <div>
     {studentRequests.length === 0 ? (
       <div className="dashboard-card text-center py-16">
@@ -411,22 +423,22 @@ const RequestsTab = () => (
       <div className="space-y-4">
         {studentRequests.map((req) => (
           <div
-            key={req.id}
+            key={req._id}
             className="dashboard-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover-scale border border-pink-300 rounded-lg bg-white p-5"
           >
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
-                {req.mentorName
-                  .split(" ")
+                {req.alumni?.username
+                  ?.split(" ")
                   .map((n) => n[0])
                   .join("")}
               </div>
               <div>
                 <h4 className="font-semibold text-gray-800">
-                  {req.mentorName}
+                  {req.alumni?.username || "Unknown"}
                 </h4>
                 <p className="text-sm text-gray-500">{req.topic}</p>
-                <p className="text-xs text-gray-400">{req.date}</p>
+                <p className="text-xs text-gray-400">{formatDate(req.createdAt)}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -435,9 +447,9 @@ const RequestsTab = () => (
               >
                 {req.status}
               </span>
-              {req.status === "accepted" && (
+              {req.status === "accepted" && req.session && (
                 <Link
-                  to="/chat"
+                  to={`/student/messages/${req.session}`}
                   className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-pink-400 to-pink-500 text-white text-xs px-3 py-2"
                 >
                   <MessageCircle className="w-3.5 h-3.5 mr-1" />
@@ -450,30 +462,21 @@ const RequestsTab = () => (
       </div>
     )}
   </div>
-);
-
-const sessions = [
-  {
-    id: 1,
-    mentorName: "Rahul Verma",
-    status: "Active",
-    started: "Apr 5, 2026",
-  },
-  {
-    id: 2,
-    mentorName: "Sneha Reddy",
-    status: "Completed",
-    started: "Mar 10, 2026",
-  },
-];
+)};
 
 const sessionStatusColors = {
-  Active: "bg-green-100 text-green-700",
-  Completed: "bg-gray-100 text-gray-600",
-  Expired: "bg-red-100 text-red-600",
+  active: "bg-green-100 text-green-700",
+  completed: "bg-gray-100 text-gray-600",
+  expired: "bg-red-100 text-red-600",
 };
 
-const SessionsTab = () => (
+const SessionsTab = ({ sessions }) => {
+  function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  }
+
+  return (
   <div>
     {sessions.length === 0 ? (
       <div className="dashboard-card text-center py-16">
@@ -488,28 +491,28 @@ const SessionsTab = () => (
     ) : (
       <div className="grid sm:grid-cols-2 gap-5">
         {sessions.map((s) => (
-          <div key={s.id} className="dashboard-card hover-scale border border-pink-300 rounded-lg bg-white p-5">
+          <div key={s._id} className="dashboard-card hover-scale border border-pink-300 rounded-lg bg-white p-5">
             <div className="flex items-center space-x-3 mb-3">
               <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
-                {s.mentorName
-                  .split(" ")
+                {s.alumni?.username
+                  ?.split(" ")
                   .map((n) => n[0])
                   .join("")}
               </div>
               <div>
-                <h4 className="font-semibold text-gray-800">{s.mentorName}</h4>
-                <p className="text-xs text-gray-400">Started {s.started}</p>
+                <h4 className="font-semibold text-gray-800">{s.alumni?.username || "Unknown"}</h4>
+                <p className="text-xs text-gray-400">Started {formatDate(s.createdAt)}</p>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span
-                className={`${sessionStatusColors[s.status]} inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold`}
+                className={`${sessionStatusColors[s.status]} capitalize inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold`}
               >
                 {s.status}
               </span>
-              {s.status === "Active" && (
+              {s.status === "active" && (
                 <Link
-                  to="/student/messages"
+                  to={`/student/messages/${s._id}`}
                   className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-pink-400 to-pink-500 text-white text-xs px-3 py-2"
                 >
                   <MessageCircle className="w-3.5 h-3.5 mr-1" />
@@ -522,6 +525,6 @@ const SessionsTab = () => (
       </div>
     )}
   </div>
-);
+)};
 
 export default StudentMentorship;

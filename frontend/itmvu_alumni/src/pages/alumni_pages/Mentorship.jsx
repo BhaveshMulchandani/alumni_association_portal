@@ -1,4 +1,3 @@
-
 import { Switch } from "@headlessui/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -106,9 +105,9 @@ const Mentorship = () => {
     }
   };
 
-  const handleOpenChat = () => {
+  const handleOpenChat = (sessionId) => {
     // Navigate to messages/chat page
-    navigate("/alumni/messages");
+    navigate(`/alumni/messages/${sessionId}`);
   };
 
   const pendingRequests = requests.filter(request => request.status === "pending");
@@ -257,7 +256,7 @@ const Mentorship = () => {
 
                     <div className="mt-6 flex items-center space-x-4">
                       <button
-                        onClick={() => handleOpenChat(request.student?._id)}
+                        onClick={() => handleOpenChat(request.session?._id)}
                         className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center space-x-2 hover:bg-green-600 transition duration-200"
                       >
                         <i className="ri-chat-1-line"></i>

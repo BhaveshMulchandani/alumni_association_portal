@@ -7,7 +7,7 @@ const getsessions = async (req ,res ) => {
                 { student: req.user._id },
                 { alumni: req.user._id }
             ],status: 'active'
-        }).populate('student', 'username').populate('alumni', 'username')
+        }).populate('student', 'username_id').populate('alumni', 'username_id')
 
         if(sessions.length === 0){
             return res.status(200).json({message:"No active sessions found", sessions: []})
@@ -24,7 +24,7 @@ const getsessions = async (req ,res ) => {
 const completesession = async (req, res) => {
 
     try {
-        const session = await sessionmodel.findById(req.params.sessionid)
+        const session = await sessionmodel.findById(req.params.sessionId)
         const userid = req.user._id.toString()
 
         if(!session){

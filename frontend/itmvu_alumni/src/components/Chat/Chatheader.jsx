@@ -12,11 +12,10 @@ const Chatheader = ({ convo, setSelectedConvo }) => {
         ←
       </button>
       <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-        {convo.avatar}
+        {convo?.avatar || "?"}
       </div>
       <div className="flex-1">
-        <h3 className="font-semibold text-gray-800 text-base">{convo.name}</h3>
-        <p className="text-xs text-gray-500">Online</p>
+        <h3 className="font-semibold text-gray-800 text-base">{convo?.name || "User"}</h3>
       </div>
     </div>
   );

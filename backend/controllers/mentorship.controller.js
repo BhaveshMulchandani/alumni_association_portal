@@ -9,7 +9,7 @@ const availablementors = async (req, res) => {
         const mentors = await usermodel.find({ role: 'alumni', isAvailable: true }).select('username  stream passingyear')
 
         if (mentors.length === 0) {
-            return res.status(404).json({ message: "No mentors available", mentors: [] });
+            return res.status(200).json({ message: "No mentors available", mentors: [] });
         }
 
         return res.status(200).json({ mentors })
@@ -64,7 +64,26 @@ const viewrequests = async (req, res) => {
 
     try {
 
-        const requests = await mentorshipmodel.find({ alumni: req.user._id, status: 'pending' }).populate('student', 'username stream passingyear')
+        const requests = await mentorshipmodel.find({ alumni: req.user._id}).populate('student', 'username stream passingyear').populate('session')
+
+        if (requests.length === 0) {
+            return res.status(200).json({ message: "No mentorship requests found", requests: [] });
+        } else {
+            return res.status(200).json({ requests })
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Some error occurred while fetching mentorship requests", error });
+    }
+}
+
+const studentrequests = async (req, res) => {
+
+
+    try {
+
+        const requests = await mentorshipmodel.find({ student: req.user._id}).populate('alumni', 'username stream passingyear').populate('session')
 
         if (requests.length === 0) {
             return res.status(200).json({ message: "No mentorship requests found", requests: [] });
@@ -86,26 +105,29 @@ const acceptrequest = async (req, res) => {
     }
 
     if(request.alumni.toString() !== req.user._id.toString()){
-        return res.status(403).json({message:"You are not authorized to accept this request"})
+        return res.status(403).json({message:"Not authorized"})
     }
 
     if(request.status !== 'pending'){
-        return res.status(400).json({message:"This request has already been processed"})
+        return res.status(400).json({message:"Already processed"})
     }
 
     request.status = 'accepted'
-    await request.save()
 
-    await session.create({
+    const newSession = await session.create({
         student: request.student,
         alumni: request.alumni,
     })
 
-    return res.status(200).json({message:"Mentorship request accepted successfully", request})
+    request.session = newSession._id
+    await request.save()
 
-
+    return res.status(200).json({
+        message: "Mentorship request accepted successfully",
+        request,
+        sessionId: newSession._id
+    })
 }
-
 const rejectrequest = async (req, res) => {
 
     const request = await mentorshipmodel.findById(req.params.id)
@@ -115,7 +137,7 @@ const rejectrequest = async (req, res) => {
     }
 
     if(request.alumni.toString() !== req.user._id.toString()){
-        return res.status(403).json({message:"You are not authorized to reject this request"})
+        return res.status(403).json({message:"Not authorized"})
     }
 
     if(request.status !== 'pending'){
@@ -129,4 +151,4 @@ const rejectrequest = async (req, res) => {
 }
 
 
-module.exports = { availablementors, requestmentorship, viewrequests, acceptrequest, rejectrequest }
+module.exports = { availablementors, requestmentorship, viewrequests, acceptrequest, rejectrequest, studentrequests }

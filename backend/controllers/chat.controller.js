@@ -15,7 +15,7 @@ const getmessages = async (req, res) => {
             return res.status(403).json({ message: "You are not authorized to view these messages" })
         }
 
-        const messages = await chatmodel.find({ session: session._id }).sort({ createdAt: 1 }).populate('sender', 'username')
+        const messages = await chatmodel.find({ session: session._id }).sort({ createdAt: 1 }).populate('sender', 'username_id')
 
         if (messages.length === 0) {
             return res.status(200).json({ message: "No messages found", messages: [] })
@@ -71,9 +71,13 @@ const sendmessage = async (req, res) => {
         const io = req.app.get('io');
 
         io.to(req.params.sessionId).emit('receive_message', {
-            sessionId: req.params.sessionId,
+            _id: newmessage._id,
+            session: session._id,
             message: newmessage.message,
-            sender: req.user._id
+            sender: {
+                _id: req.user._id
+            },
+            createdAt: newmessage.createdAt
         });
 
         return res.status(201).json({ message: "Message sent successfully", newmessage })

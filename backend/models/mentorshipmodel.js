@@ -25,6 +25,10 @@ const Mentorshipschema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'accepted', 'rejected'],
         default: 'pending'
+    },
+    session: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "session"
     }
 }, { timestamps: true });
 
