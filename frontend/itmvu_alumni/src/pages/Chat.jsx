@@ -11,14 +11,32 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [conversations, setConversations] = useState([]);
   const [selectedConvo, setSelectedConvo] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const bottomRef = useRef(null);
 
-  // ✅ always string
-  const currentUserId = String(localStorage.getItem("userId"));
-
-  // 🔹 Fetch sessions
+  // 🔥 STEP 1: GET CURRENT USER (IMPORTANT)
   useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/user/me`,
+          { withCredentials: true }
+        );
+
+        setCurrentUserId(String(res.data.user._id));
+      } catch (err) {
+        console.error("User fetch error:", err);
+      }
+    };
+
+    fetchMe();
+  }, []);
+
+  // 🔹 STEP 2: FETCH SESSIONS
+  useEffect(() => {
+    if (!currentUserId) return;
+
     const fetchSessions = async () => {
       try {
         const res = await axios.get(
@@ -52,9 +70,9 @@ const Chat = () => {
     };
 
     fetchSessions();
-  }, [sessionId]);
+  }, [sessionId, currentUserId]);
 
-  // 🔹 Join socket room
+  // 🔹 STEP 3: SOCKET JOIN
   useEffect(() => {
     if (!selectedConvo) return;
 
@@ -65,14 +83,16 @@ const Chat = () => {
     };
   }, [selectedConvo]);
 
-  // 🔹 Receive message (REALTIME FIXED)
+  // 🔹 STEP 4: RECEIVE MESSAGE (REALTIME)
   useEffect(() => {
+    if (!currentUserId) return;
+
     const handler = (data) => {
       const newMsg = {
         id: data._id,
         text: data.message,
         sender:
-          String(data.sender._id) === String(currentUserId) ? "me" : "other",
+          String(data.sender._id) === currentUserId ? "me" : "other",
         time: new Date(data.createdAt).toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -82,7 +102,6 @@ const Chat = () => {
       setMessages((prev) => {
         const existing = prev[data.session] || [];
 
-        // prevent duplicate
         if (existing.some((m) => m.id === data._id)) return prev;
 
         return {
@@ -97,9 +116,9 @@ const Chat = () => {
     return () => socket.off("receive_message", handler);
   }, [currentUserId]);
 
-  // 🔹 Fetch messages
+  // 🔹 STEP 5: FETCH MESSAGES
   useEffect(() => {
-    if (!selectedConvo || messages[selectedConvo]) return;
+    if (!selectedConvo || !currentUserId) return;
 
     const fetchMessages = async () => {
       try {
@@ -112,7 +131,7 @@ const Chat = () => {
           id: m._id,
           text: m.message,
           sender:
-            String(m.sender._id) === String(currentUserId) ? "me" : "other",
+            String(m.sender._id) === currentUserId ? "me" : "other",
           time: new Date(m.createdAt).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -129,14 +148,14 @@ const Chat = () => {
     };
 
     fetchMessages();
-  }, [selectedConvo]);
+  }, [selectedConvo, currentUserId]);
 
-  // 🔹 Auto scroll
+  // 🔹 STEP 6: SCROLL
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, selectedConvo]);
 
-  // 🔹 Send message
+  // 🔹 STEP 7: SEND MESSAGE
   const sendMessage = async () => {
     if (!input.trim() || !selectedConvo) return;
 

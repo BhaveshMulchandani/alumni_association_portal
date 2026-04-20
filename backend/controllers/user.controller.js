@@ -158,4 +158,12 @@ const toggleAvailability = async (req, res) => {
     }
 };
 
-module.exports = { signup, login, admin, logout, toggleAvailability }
+const getme = async (req, res) => {
+    return res.status(200).json({
+        user: {
+            _id: req.user._id,
+            username: req.user.username
+        }
+    });
+};
+module.exports = { signup, login, admin, logout, toggleAvailability, getme }

@@ -8,5 +8,6 @@ router.post('/login',usercontroller.login)
 router.post('/admin-setup',usercontroller.admin)
 router.post('/logout',usercontroller.logout)
 router.patch('/availability', authMiddleware.isloggedin, usercontroller.toggleAvailability);
+router.get("/me", authMiddleware.isloggedin, usercontroller.getme);
 
 module.exports = router

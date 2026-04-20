@@ -5,10 +5,7 @@ const jwt = require('jsonwebtoken')
 
 const isloggedin = async (req, res, next) => {
     const token = req.cookies.token
-    console.log(req.cookies);
-    console.log(req.token);
     
-
     if (!token)
         return res.status(401).json({ message: "unauthorised, please login first" })
 

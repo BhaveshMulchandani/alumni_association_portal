@@ -54,20 +54,15 @@ app.set('io', io);
 
 // SOCKET LOGIC
 io.on('connection', (socket) => {
-  console.log("User connected:", socket.id);
 
   // join session room
   socket.on('join_session', (sessionId) => {
     socket.join(sessionId);
-    console.log(`User joined session: ${sessionId}`);
   });
 
   socket.on('disconnect', () => {
-    console.log("User disconnected:", socket.id);
   });
 });
 
 // start server
-server.listen(3000, () => {
-  console.log("Server running on port 3000 ");
-});
+server.listen(3000);

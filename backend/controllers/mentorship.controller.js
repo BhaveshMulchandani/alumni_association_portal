@@ -73,7 +73,6 @@ const viewrequests = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Some error occurred while fetching mentorship requests", error });
     }
 }
@@ -92,7 +91,6 @@ const studentrequests = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Some error occurred while fetching mentorship requests", error });
     }
 }
