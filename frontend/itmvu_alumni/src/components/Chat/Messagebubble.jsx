@@ -2,6 +2,7 @@ const Messagebubble = ({ msg }) => {
   const isMe = msg?.sender === "me";
 
   return (
+
     <div className={`flex mb-4 ${isMe ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg text-sm ${

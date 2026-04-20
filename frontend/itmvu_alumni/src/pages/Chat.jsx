@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Chatlayout from "../components/Chat/Chatlayout";
+import socket from "../socket";
 
 const Chat = () => {
   const { sessionId } = useParams();
@@ -13,9 +14,10 @@ const Chat = () => {
 
   const bottomRef = useRef(null);
 
-  const currentUserId = localStorage.getItem("userId");
+  // ✅ always string
+  const currentUserId = String(localStorage.getItem("userId"));
 
-  // ✅ Fetch all sessions (conversations)
+  // 🔹 Fetch sessions
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -27,11 +29,11 @@ const Chat = () => {
         const convos = res.data.sessions.map((s) => ({
           id: s._id,
           name:
-            s.student?._id === currentUserId
+            String(s.student?._id) === currentUserId
               ? s.alumni.username
               : s.student.username,
           avatar: (
-            s.student?._id === currentUserId
+            String(s.student?._id) === currentUserId
               ? s.alumni.username
               : s.student.username
           )?.charAt(0),
@@ -45,16 +47,59 @@ const Chat = () => {
           setSelectedConvo(convos[0].id);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Session fetch error:", err);
       }
     };
 
     fetchSessions();
   }, [sessionId]);
 
-  // ✅ Fetch messages for selected session
+  // 🔹 Join socket room
   useEffect(() => {
     if (!selectedConvo) return;
+
+    socket.emit("join_session", selectedConvo);
+
+    return () => {
+      socket.emit("leave_session", selectedConvo);
+    };
+  }, [selectedConvo]);
+
+  // 🔹 Receive message (REALTIME FIXED)
+  useEffect(() => {
+    const handler = (data) => {
+      const newMsg = {
+        id: data._id,
+        text: data.message,
+        sender:
+          String(data.sender._id) === String(currentUserId) ? "me" : "other",
+        time: new Date(data.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+
+      setMessages((prev) => {
+        const existing = prev[data.session] || [];
+
+        // prevent duplicate
+        if (existing.some((m) => m.id === data._id)) return prev;
+
+        return {
+          ...prev,
+          [data.session]: [...existing, newMsg],
+        };
+      });
+    };
+
+    socket.on("receive_message", handler);
+
+    return () => socket.off("receive_message", handler);
+  }, [currentUserId]);
+
+  // 🔹 Fetch messages
+  useEffect(() => {
+    if (!selectedConvo || messages[selectedConvo]) return;
 
     const fetchMessages = async () => {
       try {
@@ -66,7 +111,8 @@ const Chat = () => {
         const formatted = res.data.messages.map((m) => ({
           id: m._id,
           text: m.message,
-          sender: m.sender._id === currentUserId ? "me" : "other",
+          sender:
+            String(m.sender._id) === String(currentUserId) ? "me" : "other",
           time: new Date(m.createdAt).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -78,47 +124,32 @@ const Chat = () => {
           [selectedConvo]: formatted,
         }));
       } catch (err) {
-        console.error(err);
+        console.error("Message fetch error:", err);
       }
     };
 
     fetchMessages();
   }, [selectedConvo]);
 
-  // ✅ scroll
+  // 🔹 Auto scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, selectedConvo]);
 
-  // ✅ send message
+  // 🔹 Send message
   const sendMessage = async () => {
     if (!input.trim() || !selectedConvo) return;
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/chat/${selectedConvo}/messages`,
         { message: input },
         { withCredentials: true }
       );
 
-      const newMsg = {
-        id: res.data.newmessage._id,
-        text: res.data.newmessage.message,
-        sender: "me",
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-
-      setMessages((prev) => ({
-        ...prev,
-        [selectedConvo]: [...(prev[selectedConvo] || []), newMsg],
-      }));
-
       setInput("");
     } catch (err) {
-      console.error(err);
+      console.error("Send error:", err);
     }
   };
 
