@@ -12,13 +12,13 @@ const Postschema = new mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
+        ref: "user",
         required: true
     },
     likes: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "users"
+            ref: "user"
         }
     ],
     createdAt: {

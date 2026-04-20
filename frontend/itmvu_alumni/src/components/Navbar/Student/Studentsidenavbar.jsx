@@ -23,6 +23,13 @@ const Studentsidenavbar = () => {
             </NavLink>
           </li>
 
+           <li>
+            <NavLink to="/student/feed" className={linkClasses}>
+              <Home className="w-5 h-5" />
+              <span>Feed</span>
+            </NavLink>
+          </li>
+
           <li>
             <NavLink to="/student/job" className={linkClasses}>
               <Briefcase className="w-5 h-5" />

@@ -21,6 +21,13 @@ const Alumnisidenavbar = () => {
                <span>Home</span>
              </NavLink>
            </li>
+
+            <li>
+             <NavLink to="/alumni/feed" className={linkClasses}>
+               <Home className="w-5 h-5" />
+               <span>Feed</span>
+             </NavLink>
+           </li>
  
            <li>
              <NavLink to="/alumni/job" className={linkClasses}>

@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import PostFeed from './components/PostFeed';
 
 // Alumni Pages
 import AlumniDashboard from './pages/alumni_pages/AlumniDashboard';
@@ -44,6 +45,7 @@ const App = () => {
         <Route path='donate' element={<Donation />} />
         <Route path='post' element={<Post />} />
         <Route path='messages/:sessionId' element={<Chat />} />
+        <Route path='feed' element={<PostFeed />} />
       </Route>
 
       {/* Student Routes */}
@@ -55,6 +57,7 @@ const App = () => {
         <Route path='event' element={<Events />} />
         <Route path='mentorship' element={<StudentMentorship />} />
         <Route path='messages/:sessionId' element={<Chat />} />
+        <Route path='feed' element={<PostFeed />} />
       </Route>
 
     </Routes>

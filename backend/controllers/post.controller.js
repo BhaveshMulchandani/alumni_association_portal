@@ -65,7 +65,7 @@ const likepost = async (req, res) => {
 const allposts = async (req, res) => {
 
     try {
-        const posts = await postmodel.find().sort({ createdAt: -1 })
+        const posts = await postmodel.find().sort({ createdAt: -1 }).populate('user', 'username')
 
         res.status(200).json({posts})
 
