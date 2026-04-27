@@ -137,7 +137,8 @@ const getme = async (req, res) => {
     return res.status(200).json({
         user: {
             _id: req.user._id,
-            username: req.user.username
+            username: req.user.username,
+            role: req.user.role
         }
     });
 };

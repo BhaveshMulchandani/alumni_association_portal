@@ -2,7 +2,6 @@ import { useContext } from "react";
 import Profilecontext from "../../context/Profilecontext.jsx";
 
 const Student_Profile = () => {
-
   const { profile } = useContext(Profilecontext);
 
   if (!profile) {
@@ -49,13 +48,13 @@ const Student_Profile = () => {
                 />
                 <div>
                   <h2 className="text-gray-800 font-semibold text-lg">
-                    {profile.name}
+                    {profile.user?.username}
                   </h2>
                   <h4 className="text-gray-600 text-base">
                     {profile.department}
                   </h4>
                   <h4 className="text-pink-700 font-medium text-base">
-                    {profile.passingyear}
+                    {profile.user?.passingyear || "N/A"}
                   </h4>
                 </div>
               </div>
@@ -73,7 +72,7 @@ const Student_Profile = () => {
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 p-3 py-2">
                   <a
-                    href="https://www.linkedin.com/in/bhavesh-mulchandani-45ba89237/"
+                    href={profile.socialLinks?.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-gray-100 hover:bg-blue-100 rounded-lg p-2 text-xl transition-colors"
@@ -81,7 +80,7 @@ const Student_Profile = () => {
                     <i className="ri-linkedin-line text-blue-600"></i>
                   </a>
                   <a
-                    href="https://github.com/BhaveshMulchandani"
+                    href={profile.socialLinks?.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-gray-100 hover:bg-gray-300 rounded-lg p-2 text-xl transition-colors"
@@ -89,7 +88,7 @@ const Student_Profile = () => {
                     <i className="ri-github-line text-gray-600"></i>
                   </a>
                   <a
-                    href="https://x.com/BhaveshMul13275"
+                    href={profile.socialLinks?.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-gray-100 hover:bg-blue-100 rounded-lg p-2 text-xl transition-colors"
@@ -97,36 +96,12 @@ const Student_Profile = () => {
                     <i className="ri-twitter-x-line text-blue-600"></i>
                   </a>
                   <a
-                    href="https://drive.google.com/file/d/1odhaya0X_HEieKR--A782qBIAvxPwEzO/view"
+                    href={profile.socialLinks?.resume}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-gray-100 hover:bg-orange-100 rounded-lg p-2 text-xl transition-colors"
                   >
                     <i className="ri-file-pdf-2-line text-orange-600"></i>
-                  </a>
-                  <a
-                    href="https://leetcode.com/u/bhavesh_mulchandani/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-gray-100 hover:bg-orange-100 rounded-lg p-2 transition-colors"
-                  >
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
-                      alt="LeetCode"
-                      className="w-6 h-6"
-                    />
-                  </a>
-                  <a
-                    href="https://www.geeksforgeeks.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-gray-100 hover:bg-green-100 rounded-lg p-2 transition-colors"
-                  >
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/4/43/GeeksforGeeks.svg"
-                      alt="GFG"
-                      className="w-6 h-6"
-                    />
                   </a>
                 </div>
               </div>
@@ -150,23 +125,18 @@ const Student_Profile = () => {
                 </div>
                 <div className="mt-3 mx-1">
                   <div>
-                    <h1 className="text-lg text-gray-600 font-semibold">Technical Skills</h1>
+                    <h1 className="text-lg text-gray-600 font-semibold">
+                      Technical Skills
+                    </h1>
                     <div className=" mt-2 space-x-1 space-y-1">
-                      <span className="bg-pink-50 text-pink-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-pink-50 text-pink-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-pink-50 text-pink-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-pink-50 text-pink-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-pink-50 text-pink-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                    </div>
-                  </div>
-                  <div className="mt-3">
-                    <h1 className="text-lg text-gray-600 font-semibold">Tools & Technologies</h1>
-                    <div className=" mt-2 space-x-1 space-y-1">
-                      <span className="bg-gray-50 text-gray-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-gray-50 text-gray-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-gray-50 text-gray-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-gray-50 text-gray-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
-                      <span className="bg-gray-50 text-gray-600 text-sm font-normal px-3 py-1 rounded-xl">Javascript</span>
+                      {profile.skills?.map((skill, i) => (
+                        <span
+                          key={i}
+                          className="bg-pink-50 text-pink-600 px-3 py-1 rounded-xl text-sm"
+                        >
+                          {skill}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -176,8 +146,8 @@ const Student_Profile = () => {
                   <div className="flex items-center gap-1">
                     <i className="ri-code-line text-pink-600 text-xl"></i>
                     <h1 className="text-xl font-semibold text-gray-800">
-                    Projects
-                  </h1>
+                      Projects
+                    </h1>
                   </div>
                   <button className="flex items-center rounded-full text-2xl font-semibold text-pink-500 bg-gray-100 px-3">
                     +
@@ -186,32 +156,21 @@ const Student_Profile = () => {
                 <h3 className="text-base text-gray-600 mt-1">
                   Personal projects and contributions
                 </h3>
-                <div className="w-full bg-gray-100 rounded-lg mt-4 p-4 space-y-2">
-                  <h1 className="text-gray-800 text-xl font-semibold">
-                    Alumni Association Portal
-                  </h1>
-                  <p className="text-gray-600 text-base">Full-stack web application for online learning with real-time chat and video conferencing features.</p>
-                  <div className="flex items-center space-x-4">
-                    <a
-                      href="https://github.com/BhaveshMulchandani/Alumni_Association"
-                      target="_blank"
+                
+                {profile.projects?.map((p, i) => (
+                  <div key={i} className="w-full bg-gray-100 rounded-lg mt-4 p-4 space-y-2">
+                    <h1 className="text-gray-800 text-xl font-semibold">{p.title}</h1>
+
+                    <div className="flex gap-4 mt-2">
+                      {p.github && <a href={p.github} target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-600 text-xl transition-colors"
-                    >
-                      <i className="ri-github-line text-gray-600"></i>
-                      <span className="text-gray-600 ml-1">Code</span>
-                    </a>
-                    <a
-                      href="https://github.com/BhaveshMulchandani/Alumni_Association"
-                      target="_blank"
+                      className="text-pink-600 text-xl transition-colors">Code</a>}
+                      {p.liveLink && <a href={p.liveLink} target="_blank"
                       rel="noopener noreferrer"
-                      className="text-pink-600 text-xl transition-colors"
-                    >
-                      <i className="ri-external-link-line text-pink-600"></i>
-                      <span className="text-pink-600 ml-1">Live</span>
-                    </a>
+                      className="text-pink-600 text-xl transition-colors">Live</a>}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>

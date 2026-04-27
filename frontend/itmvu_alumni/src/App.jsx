@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import PostFeed from './components/PostFeed';
+import Createprofile from './pages/Createprofile';
 
 // Alumni Pages
 import AlumniDashboard from './pages/alumni_pages/AlumniDashboard';
@@ -35,6 +36,7 @@ const App = () => {
       <Route path='/' element={<Home />} />
       <Route path='/signup' element={<Signup />} />
       <Route path='/login' element={<Login />} />
+      <Route path='/createprofile' element={<Createprofile />} />
 
       {/* Alumni Routes */}
       <Route path='/alumni' element={<AlumniLayout />}>

@@ -11,8 +11,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -25,18 +23,36 @@ const Login = () => {
         return;
       }
 
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, { email, password }, {
-        withCredentials: true
-      });
-      
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/user/login`,
+        { email, password },
+        {
+          withCredentials: true,
+        },
+      );
 
       if (response.status === 201) {
-        // Clear form fields
+        const profileRes = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/profile/me`,
+          { withCredentials: true },
+        );
+
+        const role = response.data.role;
+
+        // 🔥 STEP 3: navigation decision
+        if (!profileRes.data.profile) {
+          // ❌ profile nahi bana
+          navigate("/createprofile");
+        } else {
+          // ✅ profile bana hua hai
+          role === "alumni"
+            ? navigate("/alumni/dashboard")
+            : navigate("/student/dashboard");
+        }
+
+        // Clear form
         setEmail("");
         setPassword("");
-
-        // Navigate based on role
-        response.data.role === "alumni" ? navigate("/alumni/dashboard") : navigate("/student/dashboard");
       }
     } catch (error) {
       setError(error.response?.data?.message || "Invalid email or password");
@@ -54,7 +70,9 @@ const Login = () => {
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Alumni Connect</h1>
+              <h1 className="text-xl font-bold text-gray-800">
+                Alumni Connect
+              </h1>
               <p className="text-sm text-gray-500">University Portal</p>
             </div>
           </Link>
@@ -79,7 +97,9 @@ const Login = () => {
             <div className="p-6 pt-0">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">Email Address</label>
+                  <label htmlFor="email" className="text-sm font-medium">
+                    Email Address
+                  </label>
                   <input
                     id="email"
                     type="email"
@@ -92,7 +112,9 @@ const Login = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium">Password</label>
+                  <label htmlFor="password" className="text-sm font-medium">
+                    Password
+                  </label>
                   <div className="relative">
                     <input
                       id="password"
@@ -108,22 +130,35 @@ const Login = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                     >
-                      {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                      {showPassword ? (
+                        <Eye className="w-5 h-5" />
+                      ) : (
+                        <EyeOff className="w-5 h-5" />
+                      )}
                     </button>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <label className="flex items-center space-x-2 text-sm">
-                    <input type="checkbox" className="rounded border-pink-300 text-pink-500 focus:ring-pink-200" />
+                    <input
+                      type="checkbox"
+                      className="rounded border-pink-300 text-pink-500 focus:ring-pink-200"
+                    />
                     <span className="text-gray-600">Remember me</span>
                   </label>
-                  <Link to="#" className="text-sm text-pink-600 hover:text-pink-700 font-medium">
+                  <Link
+                    to="#"
+                    className="text-sm text-pink-600 hover:text-pink-700 font-medium"
+                  >
                     Forgot password?
                   </Link>
                 </div>
 
-                <button type="submit" className="w-full h-12 bg-pink-500 text-white rounded-md hover:bg-pink-600 text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                <button
+                  type="submit"
+                  className="w-full h-12 bg-pink-500 text-white rounded-md hover:bg-pink-600 text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   {loading ? "Signing In..." : "Sign In"}
                 </button>
               </form>
@@ -131,7 +166,10 @@ const Login = () => {
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
                   Don't have an account?{" "}
-                  <Link to="/signup" className="text-pink-600 hover:text-pink-700 font-medium">
+                  <Link
+                    to="/signup"
+                    className="text-pink-600 hover:text-pink-700 font-medium"
+                  >
                     Sign up here
                   </Link>
                 </p>

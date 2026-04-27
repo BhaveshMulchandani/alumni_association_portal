@@ -3,7 +3,7 @@ const { Profile, StudentProfile, AlumniProfile } = require("../models/profilemod
 const checkprofile = async (req, res) => {
 
     try {
-        const profile = await profilemodel.findOne({ user: req.user._id }).populate("user", "username");
+        const profile = await Profile.findOne({ user: req.user._id }).populate("user", "username");
 
 
         if (!profile) {
@@ -32,7 +32,6 @@ const createprofile = async (req, res) => {
 
     const baseData = {
       user: req.user._id,
-      name: req.user.username,
       role,
       socialLinks: req.body.socialLinks || {},
       projects: req.body.projects || []
