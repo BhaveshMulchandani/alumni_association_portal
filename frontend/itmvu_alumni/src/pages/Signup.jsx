@@ -10,15 +10,6 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    passingYear: "",
-    department: "",
-    // Alumni specific fields
-    currentCompany: "",
-    currentRole: "",
-    // Student specific fields
-    resumeLink: "",
-    githubLink: "",
-    codingProfile: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -78,13 +69,6 @@ const Signup = () => {
           email: "",
           password: "",
           confirmPassword: "",
-          passingYear: "",
-          department: "",
-          currentCompany: "",
-          currentRole: "",
-          resumeLink: "",
-          githubLink: "",
-          codingProfile: "",
         });
         setRole("");
         
@@ -214,41 +198,6 @@ const Signup = () => {
 
                   <div className="space-y-2">
                     <label
-                      htmlFor="passingYear"
-                      className="text-sm font-medium"
-                    >
-                      {role === "alumni" ? "Passing Year" : "Expected Passing Year"}
-                    </label>
-                    <input
-                      id="passingYear"
-                      type="text"
-                      placeholder={role === "alumni" ? "e.g., 2020" : "e.g., 2026"}
-                      value={formData.passingYear}
-                      onChange={(e) =>
-                        handleInputChange("passingYear", e.target.value)
-                      }
-                      className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
-                      required
-                    />
-                  </div>
-
-                  {role === "student" && (
-                    <div className="space-y-2">
-                      <label htmlFor="department" className="text-sm font-medium">Department</label>
-                      <input
-                        id="department"
-                        type="text"
-                        placeholder="e.g., Computer Science"
-                        value={formData.department}
-                        onChange={(e) => handleInputChange("department", e.target.value)}
-                        className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
-                        required
-                      />
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <label
                       htmlFor="password"
                       className="text-sm font-medium"
                     >
@@ -315,117 +264,6 @@ const Signup = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Role-specific Fields */}
-                {role === "alumni" && (
-                  <div className="space-y-4 border-t pt-4">
-                    <h4 className="font-semibold text-gray-800">
-                      Alumni Information
-                    </h4>
-
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="currentCompany"
-                        className="text-sm font-medium"
-                      >
-                        Current Company
-                      </label>
-                      <input
-                        id="currentCompany"
-                        type="text"
-                        placeholder="Company name"
-                        value={formData.currentCompany}
-                        onChange={(e) =>
-                          handleInputChange("currentCompany", e.target.value)
-                        }
-                        className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="currentRole"
-                        className="text-sm font-medium"
-                      >
-                        Current Role
-                      </label>
-                      <input
-                        id="currentRole"
-                        type="text"
-                        placeholder="Job title"
-                        value={formData.currentRole}
-                        onChange={(e) =>
-                          handleInputChange("currentRole", e.target.value)
-                        }
-                        className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
-                        required
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {role === "student" && (
-                  <div className="space-y-4 border-t pt-4">
-                    <h4 className="font-semibold text-gray-800">
-                      Student Information
-                    </h4>
-
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="resumeLink"
-                        className="text-sm font-medium"
-                      >
-                        Resume Link (Optional)
-                      </label>
-                      <input
-                        id="resumeLink"
-                        type="url"
-                        placeholder="Link to your resume"
-                        value={formData.resumeLink}
-                        onChange={(e) =>
-                          handleInputChange("resumeLink", e.target.value)
-                        }
-                        className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="githubLink"
-                        className="text-sm font-medium"
-                      >
-                        GitHub Profile (Optional)
-                      </label>
-                      <input
-                        id="githubLink"
-                        type="url"
-                        placeholder="GitHub profile URL"
-                        value={formData.githubLink}
-                        onChange={(e) =>
-                          handleInputChange("githubLink", e.target.value)
-                        }
-                        className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="codingProfile"
-                        className="text-sm font-medium"
-                      >
-                        Coding Profile (Optional)
-                      </label>
-                      <input
-                        id="codingProfile"
-                        type="url"
-                        placeholder="LeetCode, HackerRank, etc."
-                        value={formData.codingProfile}
-                        onChange={(e) =>
-                          handleInputChange("codingProfile", e.target.value)
-                        }
-                        className="w-full h-12 px-3 py-2 border border-pink-200 rounded-md focus:border-pink-400 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                )}
 
                 <button
                   type="submit"

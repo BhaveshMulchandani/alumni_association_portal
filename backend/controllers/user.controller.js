@@ -6,9 +6,9 @@ const { Profile, StudentProfile, AlumniProfile } = require('../models/profilemod
 
 const signup = async (req, res) => {
 
-    const { username, email, passingyear, stream, password, role } = req.body
+    const { username, email, password, role } = req.body
 
-    if (!username || !email || !password || !role || !passingyear || (role === 'student' && !stream)) {
+    if (!username || !email || !password || !role) {
         return res.status(401).json({ message: "missing credentials , enter valid credentials !!" })
     }
     try {
@@ -25,37 +25,19 @@ const signup = async (req, res) => {
         const user = await usermodel.create({
             username,
             email,
-            passingyear,
-            stream,
             password: hashpassword,
             role,
         })
 
+        return res.status(201).json({
+            message: "User created successfully",
+            user
+        });
 
-        let profileData = {
-            user: user._id,
-            role,
-            name: username,
-            passingyear
-        };
-
-        let profile
-
-        if (role === 'student') {
-            profileData.department = stream;
-            profile = await StudentProfile.create(profileData)
-
-            return res.status(200).json({ message: "student profile created successfully", user, profile })
-        } else if (role === 'alumni') {
-
-            profile = await AlumniProfile.create(profileData)
-
-            return res.status(200).json({ message: "alumni profile created successfully", user, profile })
-        }
     } catch (error) {
         console.log(error);
 
-        return res.status(500).json({ message: "internal server error" })
+        return res.status(500).json({ message: "internal server error",error })
 
     }
 
@@ -88,17 +70,10 @@ const login = async (req, res) => {
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
         })
 
-        let profile
-        if (user.role === "student") {
-            profile = await StudentProfile.findOne({ user: user._id })
-        } else if (user.role === "alumni") {
-            profile = await AlumniProfile.findOne({ user: user._id })
-        }
-
-        return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role, profile })
+        return res.status(201).json({ message: 'user successfully loggedin !!', role: user.role })
 
     } catch (error) {
-        return res.status(500).json({ message: "internal server error" })
+        return res.status(500).json({ message: "internal server error", error })
 
     }
 }
@@ -130,7 +105,7 @@ const admin = async (req, res) => {
 
         res.status(201).json({ message: "admin created successfully" })
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal server error", error });
     }
 }
 
@@ -154,7 +129,7 @@ const toggleAvailability = async (req, res) => {
         });
 
     } catch (error) {
-        return res.status(500).json({ message: "internal server error" });
+        return res.status(500).json({ message: "internal server error", error });
     }
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from "react-router-dom";
-import { Home, Briefcase, MessageCircle, User, PlusCircle, Calendar, Users } from "lucide-react";
+import { Home, Briefcase, MessageCircle, User, PlusCircle, Calendar, Users, Newspaper } from "lucide-react";
 
 const Studentsidenavbar = () => {
 
@@ -25,7 +25,7 @@ const Studentsidenavbar = () => {
 
            <li>
             <NavLink to="/student/feed" className={linkClasses}>
-              <Home className="w-5 h-5" />
+              <Newspaper className="w-5 h-5" />
               <span>Feed</span>
             </NavLink>
           </li>

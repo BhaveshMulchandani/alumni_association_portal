@@ -11,8 +11,6 @@ const Userschema = new mongoose.Schema({
         required : true,
         unique:true,
     },
-    passingyear : Number,
-    stream : String,
     password : {
         type : String,
         required:true,
